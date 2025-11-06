@@ -1,7 +1,7 @@
 <h2>CI-Analytics</h2>
 
-**test**
+<h3>Front-end website repository</h3>
 
-test
+This is my first time creating a website like this - fully making use of githubs potential. 👍
 
 <br/>
