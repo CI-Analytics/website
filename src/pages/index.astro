@@ -2,57 +2,409 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="CI-ANALYTICS">
+<Layout title="CI-Analytics | Data Analysis & Internet Analytics">
+  <!-- Hero Section -->
   <section class="hero">
-    <h1>CI-ANALYTICS</h1>
+    <div class="hero-content">
+      <div class="logo-container">
+        <img src="/logo.jpeg" alt="CI-Analytics Logo" class="logo">
+      </div>
+      <h1>CI-Analytics</h1>
+      <p class="tagline">Advanced Internet Data Analysis & Strategy</p>
+    </div>
   </section>
 
-  <section class="content-block">
-    <h2>This is Analytics.</h2>
-    <p>
-      Collecting data, analyzing data, predicting outcomes, strategizing and creating overviews over internet data as a whole.
-    </p>
+  <!-- About & Features Section -->
+  <section class="about-features-wrapper">
+    <!-- About Section -->
+    <section class="about">
+      <div class="container">
+        <h2>About CI-Analytics</h2>
+        <p class="about-text">
+          This organisation has existed for years with a singular focus: <span class="highlight">Analyzing internet data</span> to provide actionable insights and strategic advantages.
+        </p>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+      <div class="container">
+        <h2>What's Next</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Optimized Dashboards</h3>
+            <p>Beautiful, intuitive dashboards for real-time data visualization</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Scientific KPIs</h3>
+            <p>Data-driven key performance indicators with scientific rigor</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <h3>Case Studies</h3>
+            <p>Real-world examples and detailed analysis across industries</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3>Strategic Foundation</h3>
+            <p>Building the perfect foundation for data-driven decision making</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <h2>Ready to Transform Your Data?</h2>
+      <p>Join us in the journey of data-driven excellence</p>
+      <button class="cta-button">Get Started</button>
+    </div>
   </section>
 </Layout>
 
 <style>
   .hero {
-    height: 60vh;
-    background: url('/assets/stats.jpg') center/cover no-repeat;
+    min-height: 70vh;
+    margin-top: 0;
+    padding-top: 1.5rem;
+    background: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    overflow: hidden;
+  }
+
+  /* Animated gradient orbs */
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, rgba(0, 102, 255, 0.08) 100%);
+    border-radius: 50%;
+    top: -300px;
+    right: -200px;
+    animation: float 8s ease-in-out infinite;
+    filter: blur(40px);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0, 102, 255, 0.12) 0%, rgba(0, 212, 255, 0.06) 100%);
+    border-radius: 50%;
+    bottom: -150px;
+    left: -100px;
+    animation: float 10s ease-in-out infinite reverse;
+    filter: blur(40px);
+  }
+
+  @keyframes float {
+    0%, 100% { 
+      transform: translateY(0px) scale(1); 
+    }
+    50% { 
+      transform: translateY(30px) scale(1.05); 
+    }
+  }
+
+  /* Animated data lines */
+  .hero {
+    background-image: 
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+    animation: gridMove 20s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 80px 80px;
+    }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
     text-align: center;
     color: white;
+    max-width: 600px;
+    padding: 2rem;
+  }
+
+  .logo-container {
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  .logo {
+    width: 150px;
+    height: 150px;
+    filter: drop-shadow(0 10px 30px rgba(0, 212, 255, 0.3));
+    border-radius: 25px;
+    animation: logoFloat 4s ease-in-out infinite;
+  }
+
+  @keyframes logoFloat {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(2deg);
+    }
   }
 
   .hero h1 {
-    font-size: 6rem;
-    background: rgba(0,0,0,0.4);
-    padding: 1rem 2rem;
-    border-radius: 30px;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    background: linear-gradient(135deg, #00D4FF, #0066FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInUp 0.8s ease-out 0.2s backwards, textGlow 3s ease-in-out infinite;
   }
 
-  .content-block {
-    background: #2F2F2F;
-    padding: 3rem 6rem;
-    max-width: 800px;
-    margin: -100px auto 0 auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    position: relative;
-    color: white;
-  }
-
-  @media (max-width: 600px) {
-    .hero h1 {
-      font-size: 2rem;
-      padding: 0.7rem 1.2rem;
+  @keyframes textGlow {
+    0%, 100% {
+      filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
     }
-    .content-block {
-      margin-top: -60px;
-      padding: 2rem;
+    50% {
+      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
+    }
+  }
+
+  .tagline {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 1rem 0 0 0;
+    animation: fadeInUp 0.8s ease-out 0.4s backwards;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* About & Features Wrapper */
+  .about-features-wrapper {
+    background: linear-gradient(180deg, rgba(0, 212, 255, 0.05) 0%, rgba(0, 102, 255, 0.05) 100%);
+    position: relative;
+    border-top: 1px solid rgba(0, 212, 255, 0.2);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+  }
+
+  .about-features-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(0, 102, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* About Section */
+  .about {
+    padding: 6rem 2rem;
+    background: transparent;
+    color: white;
+    border-top: none;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    position: relative;
+    z-index: 1;
+  }
+
+  .about .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .about h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #00D4FF, #0066FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .about-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .highlight {
+    color: #00D4FF;
+    font-weight: 600;
+  }
+
+  /* Features Section */
+  .features {
+    padding: 6rem 2rem;
+    background: transparent;
+    position: relative;
+    z-index: 1;
+  }
+
+  .features h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: white;
+    background: linear-gradient(135deg, #00D4FF, #0066FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .feature-card {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .feature-card:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    background: rgba(0, 212, 255, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1.3rem;
+    margin: 1rem 0;
+    color: #00D4FF;
+  }
+
+  .feature-card p {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+  }
+
+  /* CTA Section */
+  .cta {
+    padding: 6rem 2rem;
+    background: linear-gradient(135deg, #0066FF 0%, #00D4FF 100%);
+    text-align: center;
+    color: white;
+    margin-top: 0;
+  }
+
+  .cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .cta p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+  }
+
+  .cta-button {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+  }
+
+  .cta-button:hover {
+    background: white;
+    color: #0066FF;
+    transform: scale(1.05);
+  }
+
+  /* Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+
+    .tagline {
+      font-size: 1rem;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+    }
+
+    .about h2, .features h2 {
+      font-size: 2rem;
+    }
+
+    .cta h2 {
+      font-size: 1.8rem;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

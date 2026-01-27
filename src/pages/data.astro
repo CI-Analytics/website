@@ -1,0 +1,275 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Data | CI-Analytics">
+  <!-- Hero Section with Title -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="hero-box">
+        <h1>Our Data</h1>
+        <p class="hero-subtitle">Comprehensive analytics and insights</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <section class="page-section">
+    <div class="container">
+      <div class="data-intro">
+        <p>
+          Explore our comprehensive data analysis and insights. We process and analyze vast amounts 
+          of internet data to provide you with actionable intelligence and strategic insights.
+        </p>
+      </div>
+
+      <div class="data-grid">
+        <div class="data-card">
+          <div class="data-icon">📊</div>
+          <h2>Real-Time Analytics</h2>
+          <p>
+            Access live data dashboards with real-time insights into internet trends and metrics. 
+            Monitor key performance indicators as they happen.
+          </p>
+          <ul>
+            <li>Live data feeds</li>
+            <li>Real-time dashboards</li>
+            <li>Custom metrics</li>
+          </ul>
+        </div>
+
+        <div class="data-card">
+          <div class="data-icon">📈</div>
+          <h2>Trend Analysis</h2>
+          <p>
+            Discover emerging patterns and trends in internet data. Our advanced algorithms 
+            identify opportunities before they become mainstream.
+          </p>
+          <ul>
+            <li>Pattern recognition</li>
+            <li>Trend forecasting</li>
+            <li>Anomaly detection</li>
+          </ul>
+        </div>
+
+        <div class="data-card">
+          <div class="data-icon">🎯</div>
+          <h2>Custom Reports</h2>
+          <p>
+            Tailored reports designed specifically for your needs. From executive summaries 
+            to detailed technical analysis, we've got you covered.
+          </p>
+          <ul>
+            <li>Executive summaries</li>
+            <li>Detailed analysis</li>
+            <li>Custom visualizations</li>
+          </ul>
+        </div>
+
+        <div class="data-card">
+          <div class="data-icon">🔍</div>
+          <h2>Deep Insights</h2>
+          <p>
+            Uncover hidden connections and relationships in your data. Our scientific approach 
+            ensures reliability and accuracy in every analysis.
+          </p>
+          <ul>
+            <li>Correlation analysis</li>
+            <li>Statistical modeling</li>
+            <li>Predictive analytics</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="data-stats">
+        <h2>By The Numbers</h2>
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="stat-number">10M+</div>
+            <div class="stat-label">Data Points Analyzed</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">Case Studies</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">Accuracy Rate</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Data Monitoring</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    padding: 3rem 2rem;
+    padding-top: 5rem;
+    background: transparent;
+    color: white;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-box {
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    padding: 3rem;
+    backdrop-filter: blur(10px);
+    text-align: left;
+  }
+
+  .hero-box h1 {
+    font-size: 3.5rem;
+    margin: 0 0 1rem 0;
+    background: linear-gradient(135deg, #00D4FF, #0066FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: rgba(0, 212, 255, 0.9);
+    margin: 0;
+  }
+
+  .page-section {
+    padding: 3rem 2rem 4rem 2rem;
+    background: transparent;
+    color: white;
+  }
+
+  .data-intro {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .data-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .data-card {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .data-card:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    background: rgba(0, 212, 255, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+  }
+
+  .data-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .data-card h2 {
+    color: #00D4FF;
+    margin: 0.5rem 0 1rem 0;
+  }
+
+  .data-card p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .data-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .data-card li {
+    color: rgba(0, 212, 255, 0.9);
+    padding: 0.3rem 0;
+    font-size: 0.95rem;
+  }
+
+  .data-card li::before {
+    content: "✓ ";
+    margin-right: 0.5rem;
+  }
+
+  .data-stats {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 15px;
+    padding: 3rem;
+    text-align: center;
+  }
+
+  .data-stats h2 {
+    color: #00D4FF;
+    margin-bottom: 2rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+
+  .stat {
+    padding: 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    color: #00D4FF;
+    font-weight: 700;
+  }
+
+  .stat-label {
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 1024px) {
+    .data-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .data-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

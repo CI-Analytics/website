@@ -1,4 +1,6 @@
 ---
+import Navigation from '../components/Navigation.astro';
+
 interface Props {
   title: string;
 }
@@ -17,6 +19,7 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
+    <Navigation />
     <slot />
   </body>
 </html>
@@ -26,12 +29,19 @@ const { title } = Astro.props;
     box-sizing: border-box;
   }
   
-  body, html {
-    background-color: #222222;
+  html {
+    height: 100%;
+  }
+
+  body {
+    background: linear-gradient(180deg, #0a0e27 0%, #1a2055 50%, #0a0e27 100%);
+    background-attachment: fixed;
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   h1, h2, h3, h4, h5, h6 {

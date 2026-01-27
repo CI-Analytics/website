@@ -1,0 +1,186 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About Us | CI-Analytics">
+  <!-- Hero Section with Title -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="hero-box">
+        <h1>About Us</h1>
+        <p class="hero-subtitle">Learn about our mission and vision</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <section class="page-section">
+    <div class="container">
+        <div class="about-text">
+          <h2>Our Mission</h2>
+          <p>
+            CI-Analytics is dedicated to transforming raw internet data into actionable intelligence. 
+            For years, we've been at the forefront of data analysis, helping organizations understand 
+            their digital landscape and make informed strategic decisions.
+          </p>
+
+          <h2>What We Do</h2>
+          <p>
+            We specialize in collecting, analyzing, and visualizing internet data across various domains. 
+            Our expertise spans from dashboards and KPIs to comprehensive case studies that drive real business impact.
+          </p>
+
+          <h2>Our Vision</h2>
+          <p>
+            To establish a universal foundation for data-driven decision-making that works across 
+            specific industries and broader use cases. We believe in the power of data to unlock 
+            insights and drive innovation.
+          </p>
+        </div>
+
+        <div class="team-section">
+          <h2>Why Choose Us?</h2>
+          <div class="features-list">
+            <div class="feature">
+              <div class="feature-icon">🎯</div>
+              <h3>Precision</h3>
+              <p>Accurate, scientific analysis backed by rigorous methodology</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">🚀</div>
+              <h3>Innovation</h3>
+              <p>Cutting-edge tools and techniques for modern data challenges</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">💡</div>
+              <h3>Insight</h3>
+              <p>Actionable intelligence that drives real business results</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">🤝</div>
+              <h3>Partnership</h3>
+              <p>Collaborative approach ensuring your success is our success</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    padding: 3rem 2rem;
+    padding-top: 5rem;
+    background: transparent;
+    color: white;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-box {
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    padding: 3rem;
+    backdrop-filter: blur(10px);
+    text-align: left;
+  }
+
+  .hero-box h1 {
+    font-size: 3.5rem;
+    margin: 0 0 1rem 0;
+    background: linear-gradient(135deg, #00D4FF, #0066FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: rgba(0, 212, 255, 0.9);
+    margin: 0;
+  }
+
+  .page-section {
+    padding: 3rem 2rem 4rem 2rem;
+    background: transparent;
+    color: white;
+  }
+
+  .about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .about-text h2 {
+    color: #00D4FF;
+    margin-top: 2rem;
+  }
+
+  .about-text h2:first-child {
+    margin-top: 0;
+  }
+
+  .about-text p {
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+
+  .team-section h2 {
+    color: #00D4FF;
+    margin-bottom: 2rem;
+  }
+
+  .features-list {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .feature {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .feature:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    background: rgba(0, 212, 255, 0.1);
+    transform: translateX(5px);
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature h3 {
+    color: #00D4FF;
+    margin: 0.5rem 0;
+  }
+
+  .feature p {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .about-content {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

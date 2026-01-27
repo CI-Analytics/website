@@ -1,0 +1,145 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Blog | CI-Analytics">
+  <!-- Hero Section with Title -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="hero-box">
+        <h1>Blog</h1>
+        <p class="hero-subtitle">Latest insights and articles</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <section class="page-section">
+    <div class="container">
+      <div class="blog-grid">
+        <article class="blog-card">
+          <h2>Getting Started with Data Analysis</h2>
+          <p class="date">January 27, 2026</p>
+          <p>Discover the fundamentals of modern data analysis and how CI-Analytics can help transform your approach to internet data...</p>
+          <a href="#" class="read-more">Read More →</a>
+        </article>
+        <article class="blog-card">
+          <h2>Understanding Key Performance Indicators</h2>
+          <p class="date">January 25, 2026</p>
+          <p>Learn how to identify and track the most important metrics for your business strategy...</p>
+          <a href="#" class="read-more">Read More →</a>
+        </article>
+        <article class="blog-card">
+          <h2>Data-Driven Decision Making</h2>
+          <p class="date">January 20, 2026</p>
+          <p>Explore how data-driven strategies can revolutionize your organization's approach to problem-solving...</p>
+          <a href="#" class="read-more">Read More →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    padding: 3rem 2rem;
+    padding-top: 5rem;
+    background: transparent;
+    color: white;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-box {
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    padding: 3rem;
+    backdrop-filter: blur(10px);
+    text-align: left;
+  }
+
+  .hero-box h1 {
+    font-size: 3.5rem;
+    margin: 0 0 1rem 0;
+    background: linear-gradient(135deg, #00D4FF, #0066FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: rgba(0, 212, 255, 0.9);
+    margin: 0;
+  }
+
+  .page-section {
+    padding: 3rem 2rem 4rem 2rem;
+    background: transparent;
+    color: white;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .blog-card {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 15px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .blog-card:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    background: rgba(0, 212, 255, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+  }
+
+  .blog-card h2 {
+    color: #00D4FF;
+    margin-top: 0;
+  }
+
+  .date {
+    color: rgba(0, 212, 255, 0.7);
+    font-size: 0.9rem;
+    margin: 0.5rem 0 1rem 0;
+  }
+
+  .blog-card p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+  }
+
+  .read-more {
+    color: #00D4FF;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .read-more:hover {
+    color: #00F0FF;
+    transform: translateX(5px);
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
