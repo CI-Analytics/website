@@ -1,19 +1,47 @@
-<h1>📈 | CI-Analytics | 📈</h1>
+# 📈 CI-Analytics 📈
 
-<h2>📊 - The first website repository of CI-Analytics</h2>
+## 📊 Astro Website for CI-Analytics
 
-This is my first time creating a website like this - fully making use of githubs potential. 👍
+Modern website built with Astro for CI-Analytics - Analyzing internet data with style.
 
-<br/>
+## 🚀 Getting Started
 
-<h2>📊 - What is CI-Analytics about?</h2>
+### Installation
 
-This Organisation existed for years now - Its main focus: Analyzing internet data. 
+```bash
+npm install
+```
 
-<br/>
+### Development
 
-<h2>📊 - What is to be expected in the future?</h2>
+```bash
+npm run dev
+```
+
+Visit `http://localhost:4321` to see your site.
+
+### Build
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## 📊 What is CI-Analytics about?
+
+This Organisation existed for years now - Its main focus: Analyzing internet data.
+
+## 📊 What is to be expected in the future?
 
 Optimized dashboards, scientific key performance indicators, various different case studies, data based strategy - Developing a foundation to build upon in specific data driven environments, but also for general use cases.
 
-<br/>
+## 🛠️ Technology Stack
+
+- **Astro** - Fast, modern static site builder
+- **TypeScript** - Type-safe development
+- Responsive design with mobile-first approach

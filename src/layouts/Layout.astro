@@ -1,0 +1,45 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="CI-Analytics - Data Analysis and Internet Analytics" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  * {
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    background-color: #222222;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 1rem 0;
+  }
+
+  p {
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+  }
+</style>
