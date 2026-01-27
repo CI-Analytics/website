@@ -148,15 +148,18 @@
   }
 
   .hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(10px, 10px);
+    opacity: 0;
+    transform: translateX(-15px);
   }
 
   .hamburger.active span:nth-child(2) {
-    opacity: 0;
+    width: 25px;
+    opacity: 1;
   }
 
   .hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -7px);
+    opacity: 0;
+    transform: translateX(15px);
   }
 
   @media (max-width: 768px) {
@@ -188,7 +191,7 @@
       right: 0;
       background: linear-gradient(180deg, rgba(10, 14, 39, 0.99), rgba(26, 32, 85, 0.99));
       backdrop-filter: blur(15px);
-      border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+      border-bottom: none;
       flex-direction: column;
       gap: 0;
       padding: 0;
