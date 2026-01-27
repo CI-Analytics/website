@@ -157,6 +157,13 @@ declare module 'astro:content' {
   collection: "data";
   data: InferEntrySchema<"data">
 } & { render(): Render[".md"] };
+"demelus-shorts.md": {
+	id: "demelus-shorts.md";
+  slug: "demelus-shorts";
+  body: string;
+  collection: "data";
+  data: InferEntrySchema<"data">
+} & { render(): Render[".md"] };
 };
 
 	};

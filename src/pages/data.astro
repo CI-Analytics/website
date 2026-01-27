@@ -99,11 +99,11 @@ function formatDate(date: Date) {
         <h2>By The Numbers</h2>
         <div class="stats-grid">
           <div class="stat">
-            <div class="stat-number">100M+</div>
+            <div class="stat-number">1B+</div>
             <div class="stat-label">Data Points Analyzed</div>
           </div>
           <div class="stat">
-            <div class="stat-number">200+</div>
+            <div class="stat-number">100+</div>
             <div class="stat-label">Case Studies</div>
           </div>
           <div class="stat">
@@ -111,8 +111,16 @@ function formatDate(date: Date) {
             <div class="stat-label">Cumulative Social Media Subscribers</div>
           </div>
           <div class="stat">
+            <div class="stat-number">250M+</div>
+            <div class="stat-label">Cumulative Social Media Views</div>
+          </div>
+          <div class="stat">
             <div class="stat-number">1TB+</div>
             <div class="stat-label">Stored Data</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">500K+</div>
+            <div class="stat-label">Screenshots of Data</div>
           </div>
           <div class="stat">
             <div class="stat-number">24/7</div>
@@ -143,7 +151,9 @@ function formatDate(date: Date) {
                   <h3>{repo.data.title}</h3>
                   <p class="repo-description">{repo.data.description}</p>
                   <div class="repo-footer">
-                    <span class="repo-status">{repo.data.status}</span>
+                    <span class={`repo-status ${repo.data.status === 'Inactive' ? 'status-inactive' : 'status-active'}`}>
+                      {repo.data.status}
+                    </span>
                     <span class="repo-date">{formatDate(repo.data.date)}</span>
                   </div>
                 </div>
@@ -428,11 +438,23 @@ function formatDate(date: Date) {
 
   .repo-status {
     font-size: 0.8rem;
-    background: rgba(0, 255, 100, 0.2);
-    color: #00FF64;
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
     font-weight: 600;
+    display: inline-block;
+    border: 1px solid;
+  }
+
+  .repo-status.status-active {
+    background: rgba(0, 255, 100, 0.15);
+    color: #00FF64;
+    border-color: rgba(0, 255, 100, 0.4);
+  }
+
+  .repo-status.status-inactive {
+    background: rgba(255, 50, 50, 0.15);
+    color: #FF6B6B;
+    border-color: rgba(255, 50, 50, 0.4);
   }
 
   .repo-date {
