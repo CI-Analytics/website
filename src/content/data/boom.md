@@ -2,7 +2,7 @@
 title: BOOM Server Analytics
 description: Comprehensive analytics and insights for the BOOM Minecraft Server running on Folia
 date: 2026-01-27
-createdAt: 2025-10-24
+createdAt: 2026-01-27
 type: Minecraft Server (Folia SMP)
 status: Active
 image: /boomserver.jpg
