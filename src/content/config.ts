@@ -18,6 +18,7 @@ const dataCollection = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.date(),
+    createdAt: z.date(),
     type: z.string(),
     status: z.string().default('Active'),
     image: z.string().optional(),

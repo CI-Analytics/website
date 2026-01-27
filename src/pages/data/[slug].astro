@@ -93,6 +93,10 @@ function formatDate(date: Date) {
                 <span class="meta-value status-badge">{entry.data.status}</span>
               </div>
               <div class="meta-item">
+                <span class="meta-key">Created</span>
+                <span class="meta-value">{formatDate(entry.data.createdAt)}</span>
+              </div>
+              <div class="meta-item">
                 <span class="meta-key">Updated</span>
                 <span class="meta-value">{formatDate(entry.data.date)}</span>
               </div>

@@ -2,6 +2,7 @@
 title: BOOM Server Analytics
 description: Comprehensive analytics and insights for the BOOM Minecraft Server running on Folia
 date: 2026-01-27
+createdAt: 2025-10-24
 type: Minecraft Server (Folia SMP)
 status: Active
 image: /boomserver.jpg
@@ -134,8 +135,12 @@ The BOOM Server is a Folia-powered Survival Multiplayer (SMP) world built for sc
 		<span class="stat-label">Unique Players</span>
 	</div>
 	<div class="stat-card">
+		<span class="stat-value">50,000h+</span>
+		<span class="stat-label">Total Playtime</span>
+	</div>
+    <div class="stat-card">
 		<span class="stat-value">50,000+</span>
-		<span class="stat-label">Playtime Hours</span>
+		<span class="stat-label">Total Sessions</span>
 	</div>
 	<div class="stat-card">
 		<span class="stat-value">Strong</span>
