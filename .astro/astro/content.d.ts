@@ -141,20 +141,6 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"blog": {
-"data-driven-decision-making.md": {
-	id: "data-driven-decision-making.md";
-  slug: "data-driven-decision-making";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"understanding-youtube-analytics.md": {
-	id: "understanding-youtube-analytics.md";
-  slug: "understanding-youtube-analytics";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
 "welcome-to-ci-analytics.md": {
 	id: "welcome-to-ci-analytics.md";
   slug: "welcome-to-ci-analytics";

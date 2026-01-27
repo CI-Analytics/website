@@ -1,10 +1,10 @@
 ---
 title: "Welcome to CI-Analytics Blog"
 description: "Discover insights into data analytics, internet trends, and strategic decision-making through our comprehensive analysis."
-date: 2026-01-15
+date: 2026-01-27
 author: "CI-Analytics Team"
 tags: ["analytics", "data science", "strategy"]
-image: "/logo.jpeg"
+image: "/banner_ci.jpeg"
 ---
 
 # Welcome to the CI-Analytics Blog
