@@ -259,6 +259,15 @@ import Layout from '../../layouts/Layout.astro';
           </div>
         </a>
       </div>
+
+      <!-- Additional Info -->
+      <div class="additional-info">
+        <div class="info-icon">🔬</div>
+        <p>
+          We build hundreds of channels for testing (most of them not listed here). 
+          More channels and channel building tests are always in progress...
+        </p>
+      </div>
     </div>
   </section>
 </Layout>
@@ -483,6 +492,31 @@ import Layout from '../../layouts/Layout.astro';
     border-radius: 15px;
     font-size: 0.85rem;
     color: rgba(0, 212, 255, 0.9);
+  }
+
+  .additional-info {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .info-icon {
+    font-size: 2.5rem;
+  }
+
+  .additional-info p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 700px;
   }
 
   .placeholder {

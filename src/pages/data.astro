@@ -85,20 +85,28 @@ import Layout from '../layouts/Layout.astro';
         <h2>By The Numbers</h2>
         <div class="stats-grid">
           <div class="stat">
-            <div class="stat-number">10M+</div>
+            <div class="stat-number">100M+</div>
             <div class="stat-label">Data Points Analyzed</div>
           </div>
           <div class="stat">
-            <div class="stat-number">100+</div>
+            <div class="stat-number">200+</div>
             <div class="stat-label">Case Studies</div>
           </div>
           <div class="stat">
-            <div class="stat-number">95%</div>
-            <div class="stat-label">Accuracy Rate</div>
+            <div class="stat-number">500K+</div>
+            <div class="stat-label">Kumulative Social Media Subscribers</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">1TB+</div>
+            <div class="stat-label">Stored Data</div>
           </div>
           <div class="stat">
             <div class="stat-number">24/7</div>
             <div class="stat-label">Data Monitoring</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Proven Performance Strategies</div>
           </div>
         </div>
       </div>
@@ -238,19 +246,33 @@ import Layout from '../layouts/Layout.astro';
   }
 
   .stat {
-    padding: 1.5rem;
+    padding: 2rem;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .stat:hover {
+    background: rgba(0, 212, 255, 0.12);
+    border-color: rgba(0, 212, 255, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 212, 255, 0.2);
   }
 
   .stat-number {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     color: #00D4FF;
     font-weight: 700;
+    margin-bottom: 0.8rem;
+    display: block;
   }
 
   .stat-label {
-    color: rgba(255, 255, 255, 0.7);
-    margin-top: 0.5rem;
+    color: rgba(255, 255, 255, 0.75);
     font-size: 0.95rem;
+    letter-spacing: 0.5px;
   }
 
   @media (max-width: 1024px) {
