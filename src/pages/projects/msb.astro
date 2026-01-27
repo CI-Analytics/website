@@ -395,22 +395,321 @@ import Layout from '../../layouts/Layout.astro';
     color: rgba(255, 255, 255, 0.5);
   }
 
+  @media (max-width: 1024px) {
+    .page-hero {
+      padding: 2rem 1.5rem;
+      padding-top: 4.5rem;
+    }
+
+    .hero-box {
+      padding: 2rem 1.5rem;
+    }
+
+    .project-header {
+      gap: 1.5rem;
+    }
+
+    .hero-box h1 {
+      font-size: 2.5rem;
+    }
+
+    .servers-grid {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .section-intro h2 {
+      font-size: 2rem;
+    }
+  }
+
   @media (max-width: 768px) {
+    .page-hero {
+      padding: 1.5rem 1rem;
+      padding-top: 4rem;
+    }
+
+    .hero-box {
+      padding: 1.5rem 1rem;
+      border-radius: 15px;
+    }
+
     .project-header {
       flex-direction: column;
       text-align: center;
+      gap: 1rem;
+    }
+
+    .project-icon {
+      font-size: 3rem;
     }
 
     .hero-box h1 {
       font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+
+    .breadcrumb a {
+      font-size: 0.9rem;
+    }
+
+    .page-section {
+      padding: 2rem 1rem 2.5rem 1rem;
+    }
+
+    .section-intro {
+      margin-bottom: 2rem;
+    }
+
+    .section-intro h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-intro p {
+      font-size: 0.95rem;
     }
 
     .servers-grid {
       grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .server-card {
+      border-radius: 15px;
+    }
+
+    .server-banner {
+      height: 130px;
+      border-radius: 15px 15px 0 0;
+    }
+
+    .server-type {
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+
+    .server-info {
+      padding: 1.5rem;
+    }
+
+    .server-info h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .server-description {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
     }
 
     .server-details {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      padding: 0.8rem;
+    }
+
+    .detail-label {
+      font-size: 0.75rem;
+    }
+
+    .detail-value {
+      font-size: 1rem;
+    }
+
+    .server-features h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .server-features li {
+      font-size: 0.85rem;
+      padding: 0.2rem 0;
+    }
+
+    .server-footer {
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      padding-top: 1rem;
+    }
+
+    .status-badge {
+      padding: 0.3rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    .visit-btn {
+      padding: 0.4rem 1.2rem;
+      font-size: 0.9rem;
+    }
+
+    .placeholder-content {
+      padding: 2rem;
+    }
+
+    .placeholder-icon {
+      font-size: 3rem;
+    }
+
+    .placeholder h3 {
+      font-size: 1.2rem;
+    }
+
+    .placeholder p {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-hero {
+      padding: 1rem 0.8rem;
+      padding-top: 3.5rem;
+    }
+
+    .hero-box {
+      padding: 1.2rem 0.8rem;
+      border-radius: 10px;
+    }
+
+    .project-icon {
+      font-size: 2rem;
+    }
+
+    .hero-box h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .hero-subtitle {
+      font-size: 0.9rem;
+    }
+
+    .breadcrumb a {
+      font-size: 0.8rem;
+    }
+
+    .page-section {
+      padding: 1.2rem 0.8rem 1.8rem 0.8rem;
+    }
+
+    .section-intro {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-intro h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-intro p {
+      font-size: 0.9rem;
+    }
+
+    .servers-grid {
       grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+
+    .server-banner {
+      height: 110px;
+    }
+
+    .server-type {
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    .server-info {
+      padding: 1rem;
+    }
+
+    .server-info h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .server-description {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin-bottom: 0.8rem;
+    }
+
+    .server-details {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+      padding: 0.6rem;
+    }
+
+    .detail {
+      text-align: center;
+    }
+
+    .detail-label {
+      font-size: 0.7rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .detail-value {
+      font-size: 0.9rem;
+    }
+
+    .server-features {
+      margin-bottom: 1rem;
+    }
+
+    .server-features h4 {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .server-features li {
+      font-size: 0.8rem;
+      padding: 0.15rem 0;
+    }
+
+    .server-footer {
+      flex-direction: column;
+      gap: 0.8rem;
+      padding-top: 1rem;
+    }
+
+    .status-badge {
+      width: 100%;
+      text-align: center;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+    }
+
+    .visit-btn {
+      width: 100%;
+      text-align: center;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .placeholder-content {
+      padding: 1.5rem;
+    }
+
+    .placeholder-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .placeholder h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .placeholder p {
+      font-size: 0.85rem;
     }
   }
 </style>

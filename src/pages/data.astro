@@ -279,19 +279,184 @@ import Layout from '../layouts/Layout.astro';
     .data-grid {
       grid-template-columns: repeat(2, 1fr);
     }
+
+    .page-hero {
+      padding: 2rem 1.5rem;
+      padding-top: 4.5rem;
+    }
+
+    .hero-box h1 {
+      font-size: 2.5rem;
+    }
+
+    .data-stats {
+      padding: 2rem 1.5rem;
+    }
   }
 
   @media (max-width: 768px) {
-    h1 {
+    .page-hero {
+      padding: 1.5rem 1rem;
+      padding-top: 4rem;
+    }
+
+    .hero-box {
+      padding: 2rem 1.5rem;
+      border-radius: 15px;
+    }
+
+    .hero-box h1 {
       font-size: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
     }
 
     .data-grid {
       grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .data-card {
+      padding: 1.2rem;
+      border-radius: 12px;
+    }
+
+    .data-card h2 {
+      font-size: 1.3rem;
+    }
+
+    .data-card p {
+      font-size: 0.95rem;
+    }
+
+    .data-icon {
+      font-size: 2rem;
+    }
+
+    .data-intro {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .data-stats {
+      padding: 1.5rem 1rem;
+      border-radius: 12px;
+    }
+
+    .data-stats h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
     }
 
     .stats-grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .stat {
+      padding: 1.2rem;
+      border-radius: 12px;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-hero {
+      padding: 1rem 0.8rem;
+      padding-top: 3.5rem;
+    }
+
+    .hero-box {
+      padding: 1.5rem 1rem;
+      border-radius: 10px;
+    }
+
+    .hero-box h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 0.9rem;
+    }
+
+    .page-section {
+      padding: 1.5rem 0.8rem 2rem 0.8rem;
+    }
+
+    .data-intro {
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .data-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .data-card {
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    .data-card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .data-card p {
+      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .data-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .data-card li {
+      font-size: 0.9rem;
+      padding: 0.2rem 0;
+    }
+
+    .data-stats {
+      padding: 1.2rem 0.8rem;
+      border-radius: 10px;
+    }
+
+    .data-stats h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+
+    .stat {
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
     }
   }
 </style>
