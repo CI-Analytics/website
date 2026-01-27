@@ -61,7 +61,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="container">
       <h2>Ready to Transform Your Data?</h2>
       <p>Join us in the journey of data-driven excellence</p>
-      <button class="cta-button">Get Started</button>
+      <a class="cta-button" href="/get-started">Get Started</a>
     </div>
   </section>
 </Layout>
@@ -70,7 +70,7 @@ import Layout from '../layouts/Layout.astro';
   .hero {
     min-height: 70vh;
     margin-top: 0;
-    padding-top: 1.5rem;
+    padding: 4rem 0 0 0;
     background: transparent;
     display: flex;
     justify-content: center;
@@ -115,23 +115,7 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
-  /* Animated data lines */
-  .hero {
-    background-image: 
-      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px);
-    background-size: 80px 80px;
-    animation: gridMove 20s linear infinite;
-  }
-
-  @keyframes gridMove {
-    0% {
-      background-position: 0 0;
-    }
-    100% {
-      background-position: 80px 80px;
-    }
-  }
+  /* Grid overlay now provided globally in Layout */
 
   .hero-content {
     position: relative;
@@ -384,7 +368,7 @@ import Layout from '../layouts/Layout.astro';
   @media (max-width: 1024px) {
     .hero {
       min-height: 60vh;
-      padding: 2rem 1.5rem;
+      padding: 4rem 1.5rem 0 1.5rem;
     }
 
     .hero::before {
@@ -477,8 +461,7 @@ import Layout from '../layouts/Layout.astro';
   @media (max-width: 768px) {
     .hero {
       min-height: 50vh;
-      padding: 1.5rem 1rem;
-      padding-top: 3rem;
+      padding: 4.5rem 1rem 0 1rem;
     }
 
     .hero::before {
@@ -580,8 +563,7 @@ import Layout from '../layouts/Layout.astro';
   @media (max-width: 480px) {
     .hero {
       min-height: 45vh;
-      padding: 1rem 0.8rem;
-      padding-top: 3rem;
+      padding: 5.5rem 0.8rem 0 0.8rem;
     }
 
     .hero::before {
