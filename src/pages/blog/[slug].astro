@@ -1,0 +1,653 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const blogPosts = await getCollection('blog');
+  return blogPosts.map((post: CollectionEntry<'blog'>) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts
+  .filter((p: CollectionEntry<'blog'>) => p.slug !== post.slug)
+  .sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => 
+    b.data.date.getTime() - a.data.date.getTime()
+  );
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  }).format(date);
+}
+---
+
+<Layout title={`${post.data.title} | CI-Analytics Blog`}>
+  <div class="blog-post-container">
+    <div class="container">
+      <div class="blog-layout">
+        <!-- Main Content -->
+        <article class="blog-content">
+          <div class="action-buttons">
+            <a href="/blog" class="btn-back">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              Back to Blog
+            </a>
+            <button id="pdf-download" class="btn-download">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download PDF
+            </button>
+          </div>
+          
+          <div class="header-section">
+            {post.data.image && (
+              <div class="featured-image">
+                <img src={post.data.image} alt={post.data.title} />
+              </div>
+            )}
+            
+            <div class="blog-header">
+              <h1>{post.data.title}</h1>
+              <div class="post-meta">
+                <span class="date">{formatDate(post.data.date)}</span>
+                <span class="author">By {post.data.author}</span>
+              </div>
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="tags">
+                  {post.data.tags.map((tag: string) => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <div class="post-body">
+            <Content />
+          </div>
+        </article>
+
+        <!-- Sidebar -->
+        <aside class="blog-sidebar">
+          <div class="sidebar-sticky">
+            <h3>More Articles</h3>
+            <div class="sidebar-posts">
+              {sortedPosts.map((otherPost: CollectionEntry<'blog'>) => (
+                <a href={`/blog/${otherPost.slug}`} class="sidebar-post">
+                  {otherPost.data.image && (
+                    <div class="sidebar-thumbnail">
+                      <img src={otherPost.data.image} alt={otherPost.data.title} />
+                    </div>
+                  )}
+                  <div class="sidebar-content">
+                    <h4>{otherPost.data.title}</h4>
+                    <p class="sidebar-date">{formatDate(otherPost.data.date)}</p>
+                    <p class="sidebar-excerpt">{otherPost.data.description}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  document.getElementById('pdf-download')?.addEventListener('click', () => {
+    window.print();
+  });
+</script>
+
+<style>
+  .blog-post-container {
+    padding: 3rem 2rem 4rem 2rem;
+    padding-top: 5rem;
+    color: white;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .blog-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 3rem;
+  }
+
+  /* Main Content */
+  .blog-content {
+    background: rgba(10, 14, 39, 0.7);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    background: linear-gradient(180deg, rgba(0, 212, 255, 0.05) 0%, transparent 100%);
+  }
+
+  .btn-back,
+  .btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    background: rgba(0, 212, 255, 0.08);
+    color: #00D4FF;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .btn-back:hover,
+  .btn-download:hover {
+    background: rgba(0, 212, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 212, 255, 0.2);
+  }
+
+  .btn-back svg,
+  .btn-download svg {
+    flex-shrink: 0;
+  }
+
+  .btn-download {
+    margin-left: auto;
+  }
+
+  .header-section {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(0, 102, 255, 0.04) 100%);
+    padding: 2rem;
+    padding-bottom: 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+  }
+
+  .featured-image {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .featured-image img {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 15px;
+    filter: brightness(0.75) saturate(1.2);
+  }
+
+  .blog-header {
+    padding: 0 0 2rem 0;
+  }
+  }
+
+  .blog-header h1 {
+    font-size: 2.2rem;
+    margin: 0 0 1rem 0;
+    background: linear-gradient(135deg, #00D4FF, #0066FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.3;
+  }
+
+  .post-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .date {
+    color: rgba(0, 212, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .author {
+    color: rgba(0, 212, 255, 0.65);
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .tag {
+    background: rgba(0, 102, 255, 0.3);
+    border: 1px solid rgba(0, 102, 255, 0.5);
+    color: #00D4FF;
+    padding: 0.35rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+  }
+
+  .tag:hover {
+    background: rgba(0, 102, 255, 0.4);
+    border-color: rgba(0, 212, 255, 0.7);
+  }
+
+  .post-body {
+    padding: 3rem;
+    line-height: 1.8;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  /* Markdown Styles */
+  .post-body :global(h1) {
+    color: #00D4FF;
+    font-size: 2rem;
+    margin: 2rem 0 1rem 0;
+  }
+
+  .post-body :global(h2) {
+    color: #00D4FF;
+    font-size: 1.6rem;
+    margin: 1.8rem 0 0.8rem 0;
+  }
+
+  .post-body :global(h3) {
+    color: rgba(0, 212, 255, 0.9);
+    font-size: 1.3rem;
+    margin: 1.5rem 0 0.7rem 0;
+  }
+
+  .post-body :global(p) {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 1rem;
+  }
+
+  .post-body :global(a) {
+    color: #00D4FF;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .post-body :global(a:hover) {
+    color: #00F0FF;
+    border-bottom-color: #00F0FF;
+  }
+
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .post-body :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .post-body :global(code) {
+    background: rgba(0, 102, 255, 0.15);
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: #00D4FF;
+  }
+
+  .post-body :global(pre) {
+    background: rgba(0, 102, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    padding: 1.5rem;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  .post-body :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .post-body :global(blockquote) {
+    border-left: 3px solid #00D4FF;
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    color: rgba(0, 212, 255, 0.9);
+    font-style: italic;
+  }
+
+  .post-body :global(strong) {
+    color: #00D4FF;
+    font-weight: 600;
+  }
+
+  /* Sidebar */
+  .blog-sidebar {
+    position: relative;
+  }
+
+  .sidebar-sticky {
+    position: sticky;
+    top: 5rem;
+    background: rgba(10, 14, 39, 0.7);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .sidebar-sticky h3 {
+    color: #00D4FF;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+  }
+
+  .sidebar-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sidebar-post {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(0, 102, 255, 0.1);
+    border: 1px solid rgba(0, 102, 255, 0.3);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .sidebar-post:hover {
+    background: rgba(0, 102, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.5);
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
+  }
+
+  .sidebar-thumbnail {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(0, 102, 255, 0.2);
+  }
+
+  .sidebar-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8) saturate(1.1);
+  }
+
+  .sidebar-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sidebar-post h4 {
+    color: #00D4FF;
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .sidebar-date {
+    color: rgba(0, 212, 255, 0.6);
+    font-size: 0.8rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .sidebar-excerpt {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .blog-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-sidebar {
+      order: 2;
+    }
+
+    .sidebar-sticky {
+      position: static;
+    }
+
+    .sidebar-posts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .sidebar-thumbnail {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .blog-post-container {
+      padding: 2rem 1rem 3rem 1rem;
+      padding-top: 4rem;
+    }
+
+    .blog-content {
+      overflow: hidden;
+    }
+
+    .action-buttons {
+      padding: 1.5rem;
+    }
+
+    .header-section {
+      padding: 1.5rem;
+      padding-bottom: 0;
+    }
+
+    .featured-image {
+      margin-bottom: 1.2rem;
+    }
+
+    .blog-header {
+      padding: 0 0 1.5rem 0;
+    }
+
+    .blog-header h1 {
+      font-size: 1.9rem;
+    }
+
+    .post-meta {
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .post-body {
+      padding: 2rem;
+    }
+
+    .post-body :global(h1) {
+      font-size: 1.6rem;
+    }
+
+    .post-body :global(h2) {
+      font-size: 1.3rem;
+    }
+
+    .sidebar-posts {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .action-buttons {
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+
+    .btn-back,
+    .btn-download {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-download {
+      margin-left: 0;
+    }
+
+    .header-section {
+      padding: 1rem;
+      padding-bottom: 0;
+    }
+
+    .featured-image {
+      margin-bottom: 1rem;
+    }
+
+    .blog-header {
+      padding: 0 0 1rem 0;
+    }
+
+    .blog-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .post-body {
+      padding: 1.5rem;
+    }
+
+    .post-body :global(h1) {
+      font-size: 1.4rem;
+    }
+
+    .post-body :global(h2) {
+      font-size: 1.2rem;
+    }
+
+    .sidebar-sticky {
+      padding: 1.5rem;
+    }
+
+    .sidebar-thumbnail {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  /* Print Styles for PDF */
+  @media print {
+    .blog-post-container {
+      padding: 0;
+      padding-top: 0;
+    }
+
+    .action-buttons,
+    .blog-sidebar {
+      display: none !important;
+    }
+
+    .blog-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-content {
+      border: none;
+      border-radius: 0;
+      background: white;
+    }
+
+    .featured-image {
+      page-break-inside: avoid;
+    }
+
+    .blog-header {
+      background: white;
+      border-bottom: 2px solid #00D4FF;
+      color: #000;
+    }
+
+    .blog-header h1 {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .post-body {
+      background: white;
+      color: #000;
+    }
+
+    .post-body :global(h1),
+    .post-body :global(h2),
+    .post-body :global(h3) {
+      color: #0066FF;
+      page-break-after: avoid;
+    }
+
+    .post-body :global(p) {
+      color: #000;
+    }
+
+    .post-body :global(a) {
+      color: #0066FF;
+      text-decoration: underline;
+    }
+
+    .post-body :global(pre),
+    .post-body :global(code) {
+      page-break-inside: avoid;
+    }
+
+    .tag {
+      border: 1px solid #0066FF;
+      color: #0066FF;
+      background: white;
+    }
+  }
