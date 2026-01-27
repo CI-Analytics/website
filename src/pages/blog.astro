@@ -32,29 +32,21 @@ function formatDate(date: Date) {
     <div class="container">
       <div class="blog-grid">
         {sortedPosts.map((post: CollectionEntry<'blog'>) => (
-          <article class="blog-card">
-            {post.data.image && (
-              <div class="blog-thumbnail">
-                <img src={post.data.image} alt={post.data.title} />
+          <a href={`/blog/${post.slug}`} class="blog-card-link">
+            <article class="blog-card">
+              {post.data.image && (
+                <div class="blog-thumbnail">
+                  <img src={post.data.image} alt={post.data.title} />
+                </div>
+              )}
+              <div class="blog-card-content">
+                <h2>{post.data.title}</h2>
+                <p class="date">{formatDate(post.data.date)}</p>
+                <p class="description">{post.data.description}</p>
+                <span class="read-more">Read More →</span>
               </div>
-            )}
-            <div class="blog-card-content">
-              <h2>{post.data.title}</h2>
-              <p class="date">{formatDate(post.data.date)}</p>
-              <p class="description">{post.data.description}</p>
-              <div class="card-footer">
-                <span class="author">{post.data.author}</span>
-                {post.data.tags && post.data.tags.length > 0 && (
-                  <div class="tags">
-                    {post.data.tags.map((tag: string) => (
-                      <span class="tag">{tag}</span>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <a href={`/blog/${post.slug}`} class="read-more">Read More →</a>
-            </div>
-          </article>
+            </article>
+          </a>
         ))}
       </div>
     </div>
@@ -106,8 +98,13 @@ function formatDate(date: Date) {
 
   .blog-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .blog-card-link {
+    text-decoration: none;
+    display: block;
   }
 
   .blog-card {
@@ -120,6 +117,7 @@ function formatDate(date: Date) {
     display: flex;
     flex-direction: column;
     position: relative;
+    height: 100%;
   }
 
   .blog-card::before {
@@ -155,6 +153,24 @@ function formatDate(date: Date) {
     background: rgba(0, 102, 255, 0.1);
   }
 
+  .blog-thumbnail::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 20, 40, 0.5) 0%, rgba(0, 50, 80, 0.4) 100%);
+    opacity: 1;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .blog-card:hover .blog-thumbnail::after {
+    opacity: 0;
+  }
+
   .blog-thumbnail img {
     width: 100%;
     height: 100%;
@@ -162,6 +178,8 @@ function formatDate(date: Date) {
     transition: transform 0.3s ease;
     filter: brightness(0.8) saturate(1.2);
     border-radius: 15px 15px 0 0;
+    position: relative;
+    z-index: 1;
   }
 
   .blog-card:hover .blog-thumbnail img {
@@ -170,7 +188,7 @@ function formatDate(date: Date) {
   }
 
   .blog-card-content {
-    padding: 1.5rem;
+    padding: 1.2rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -181,23 +199,27 @@ function formatDate(date: Date) {
 
   .blog-card-content h2 {
     color: #00D4FF;
-    margin: 0 0 0.3rem 0;
-    font-size: 1.35rem;
-    line-height: 1.35;
+    margin: 0 0 0.2rem 0;
+    font-size: 1.15rem;
+    line-height: 1.3;
   }
 
   .date {
     color: rgba(0, 212, 255, 0.6);
-    font-size: 0.8rem;
-    margin: 0 0 0.8rem 0;
+    font-size: 0.75rem;
+    margin: 0 0 0.6rem 0;
   }
 
   .description {
     color: rgba(255, 255, 255, 0.8);
-    line-height: 1.5;
+    line-height: 1.4;
     flex-grow: 1;
-    margin: 0 0 1.2rem 0;
-    font-size: 0.95rem;
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .card-footer {
@@ -245,12 +267,12 @@ function formatDate(date: Date) {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: 0.5rem;
-    padding: 0.65rem 1.5rem;
+    margin-top: 0.3rem;
+    padding: 0.55rem 1.2rem;
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 102, 255, 0.15));
     border: 1.5px solid rgba(0, 212, 255, 0.4);
     border-radius: 10px;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
   }
 
   .read-more:hover {
@@ -260,10 +282,25 @@ function formatDate(date: Date) {
     box-shadow: 0 5px 15px rgba(0, 212, 255, 0.25);
   }
 
+  @media (max-width: 1440px) {
+    .blog-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+    }
+  }
+
   @media (max-width: 1024px) {
     .blog-grid {
       grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
+      gap: 1.5rem;
+    }
+
+    .blog-card-content {
+      padding: 1rem;
+    }
+
+    .blog-card-content h2 {
+      font-size: 1.1rem;
     }
   }
 
@@ -277,7 +314,11 @@ function formatDate(date: Date) {
     }
 
     .page-hero {
-      padding-top: 4rem;
+      padding-top: 5.5rem;
+    }
+
+    .page-section {
+      padding-bottom: 6rem;
     }
 
     .blog-grid {

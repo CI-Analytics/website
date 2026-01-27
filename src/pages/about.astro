@@ -66,6 +66,15 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
   </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <h2>Ready to Transform Your Data?</h2>
+      <p>Join us in the journey of data-driven excellence</p>
+      <a class="cta-button" href="/get-started">Get Started</a>
+    </div>
+  </section>
 </Layout>
 
 <style>
@@ -174,6 +183,46 @@ import Layout from '../layouts/Layout.astro';
     font-size: 0.95rem;
   }
 
+  /* CTA Section */
+  .cta {
+    padding: 6rem 2rem;
+    background: linear-gradient(135deg, #0066FF 0%, #00D4FF 100%);
+    text-align: center;
+    color: white;
+    margin-top: 0;
+  }
+
+  .cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .cta p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+  }
+
+  .cta-button {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .cta-button:hover {
+    background: white;
+    color: #0066FF;
+    transform: scale(1.05);
+  }
+
   @media (max-width: 768px) {
     h1 {
       font-size: 2rem;
@@ -182,5 +231,25 @@ import Layout from '../layouts/Layout.astro';
     .about-content {
       grid-template-columns: 1fr;
     }
+
+    .cta {
+      padding: 3rem 1.5rem;
+    }
+
+    .cta h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .cta p {
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-button {
+      padding: 0.75rem 2rem;
+      font-size: 0.95rem;
+    }
   }
+
 </style>
