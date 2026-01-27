@@ -1,5 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+const dataRepositories = await getCollection('data');
+const sortedRepositories = dataRepositories.sort((a: CollectionEntry<'data'>, b: CollectionEntry<'data'>) => 
+  b.data.date.getTime() - a.data.date.getTime()
+);
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  }).format(date);
+}
 ---
 
 <Layout title="Data | CI-Analytics">
@@ -108,6 +122,34 @@ import Layout from '../layouts/Layout.astro';
             <div class="stat-number">10+</div>
             <div class="stat-label">Proven Performance Strategies</div>
           </div>
+        </div>
+      </div>
+
+      <!-- Data Repositories Register -->
+      <div class="repositories-section">
+        <h2>Data Repositories</h2>
+        <p class="section-subtitle">Explore our collection of data insights and analytics</p>
+        <div class="repositories-grid">
+          {sortedRepositories.map((repo: CollectionEntry<'data'>) => (
+            <a href={`/data/${repo.slug}`} class="repo-card-link">
+              <article class="repo-card">
+                {repo.data.image && (
+                  <div class="repo-thumbnail">
+                    <img src={repo.data.image} alt={repo.data.title} />
+                  </div>
+                )}
+                <div class="repo-content">
+                  <div class="repo-type">{repo.data.type}</div>
+                  <h3>{repo.data.title}</h3>
+                  <p class="repo-description">{repo.data.description}</p>
+                  <div class="repo-footer">
+                    <span class="repo-status">{repo.data.status}</span>
+                    <span class="repo-date">{formatDate(repo.data.date)}</span>
+                  </div>
+                </div>
+              </article>
+            </a>
+          ))}
         </div>
       </div>
     </div>
@@ -274,7 +316,180 @@ import Layout from '../layouts/Layout.astro';
     font-size: 0.95rem;
     letter-spacing: 0.5px;
   }
+  /* Repositories Section */
+  .repositories-section {
+    margin-top: 4rem;
+  }
 
+  .repositories-section h2 {
+    color: #00D4FF;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .section-subtitle {
+    font-size: 1.05rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 3rem;
+  }
+
+  .repositories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .repo-card-link {
+    text-decoration: none;
+    display: block;
+  }
+
+  .repo-card {
+    background: rgba(10, 14, 39, 0.7);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.320, 1);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .repo-card:hover {
+    border-color: rgba(0, 212, 255, 0.6);
+    background: rgba(0, 212, 255, 0.05);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+  }
+
+  .repo-thumbnail {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: rgba(0, 212, 255, 0.1);
+  }
+
+  .repo-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 0;
+    filter: brightness(0.85);
+  }
+
+  .repo-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .repo-type {
+    font-size: 0.8rem;
+    color: rgba(0, 212, 255, 0.7);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .repo-card h3 {
+    color: #00D4FF;
+    margin: 0 0 0.8rem 0;
+    font-size: 1.3rem;
+    line-height: 1.4;
+  }
+
+  .repo-description {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .repo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 212, 255, 0.2);
+    margin-top: auto;
+  }
+
+  .repo-status {
+    font-size: 0.8rem;
+    background: rgba(0, 255, 100, 0.2);
+    color: #00FF64;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-weight: 600;
+  }
+
+  .repo-date {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  @media (max-width: 1024px) {
+    .repositories-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .repositories-section {
+      margin-top: 3rem;
+    }
+
+    .repositories-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    .repositories-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .repo-card h3 {
+      font-size: 1.1rem;
+    }
+
+    .repo-description {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .repositories-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .repo-card h3 {
+      font-size: 1rem;
+    }
+
+    .repo-description {
+      font-size: 0.85rem;
+      -webkit-line-clamp: 2;
+    }
+  }
   @media (max-width: 1024px) {
     .data-grid {
       grid-template-columns: repeat(2, 1fr);

@@ -47,12 +47,12 @@ import Layout from '../../layouts/Layout.astro';
                 <span class="detail-value">1.21.11</span>
               </div>
               <div class="detail">
-                <span class="detail-label">Max Players:</span>
-                <span class="detail-value">100</span>
+                <span class="detail-label">Active Players</span>
+                <span class="detail-value">250</span>
               </div>
               <div class="detail">
                 <span class="detail-label">Uptime:</span>
-                <span class="detail-value">100%</span>
+                <span class="detail-value">3 months</span>
               </div>
             </div>
             <div class="server-features">
@@ -66,7 +66,10 @@ import Layout from '../../layouts/Layout.astro';
             </div>
             <div class="server-footer">
               <span class="status-badge online">● Online</span>
-              <a href="https://mc-boom.de/" class="visit-btn" target="_blank" rel="noopener noreferrer">Visit Website</a>
+              <div class="server-footer-buttons">
+                <a href="/data/boom" class="stats-btn">Stats Insights</a>
+                <a href="https://mc-boom.de/" class="visit-btn" target="_blank" rel="noopener noreferrer">Visit Website</a>
+              </div>
             </div>
           </div>
         </div>
@@ -343,6 +346,31 @@ import Layout from '../../layouts/Layout.astro';
     background: rgba(0, 255, 100, 0.2);
     color: #00FF64;
     border: 1px solid rgba(0, 255, 100, 0.3);
+  }
+
+  .server-footer-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .stats-btn {
+    padding: 0.5rem 1.5rem;
+    background: rgba(0, 212, 255, 0.1);
+    color: #00D4FF;
+    text-decoration: none;
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: inline-block;
+  }
+
+  .stats-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: #00D4FF;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
   }
 
   .visit-btn {
@@ -680,6 +708,18 @@ import Layout from '../../layouts/Layout.astro';
       padding-top: 1rem;
     }
 
+    .server-footer-buttons {
+      flex-direction: column;
+      gap: 0.6rem;
+      width: 100%;
+    }
+
+    .stats-btn {
+      width: 100%;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
     .status-badge {
       width: 100%;
       text-align: center;
@@ -690,8 +730,8 @@ import Layout from '../../layouts/Layout.astro';
     .visit-btn {
       width: 100%;
       text-align: center;
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.8rem;
     }
 
     .placeholder-content {

@@ -12,6 +12,19 @@ const blogCollection = defineCollection({
   }),
 });
 
+const dataCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.date(),
+    type: z.string(),
+    status: z.string().default('Active'),
+    image: z.string().optional(),
+  }),
+});
+
 export const collections = {
   'blog': blogCollection,
+  'data': dataCollection,
 };

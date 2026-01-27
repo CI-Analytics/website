@@ -31,7 +31,7 @@ import Layout from '../../layouts/Layout.astro';
 
       <div class="channels-grid">
         <!-- Channel 1: Tiimon -->
-        <a href="https://www.youtube.com/@Tiimon_" class="channel-card" target="_blank" rel="noopener noreferrer">
+        <div class="channel-card">
           <div class="channel-thumbnail">
             <img src="/tiimon.jpg" alt="Tiimon Logo" class="channel-logo" />
             <div class="play-icon">▶</div>
@@ -60,11 +60,15 @@ import Layout from '../../layouts/Layout.astro';
               <span class="tag">Gaming</span>
               <span class="tag">Entertainment</span>
             </div>
+            <div class="channel-actions">
+              <a href="/data/tiimon" class="stats-btn">Stats Insights</a>
+              <a href="https://www.youtube.com/@Tiimon_" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
+            </div>
           </div>
-        </a>
+        </div>
 
         <!-- Channel 2: Voiett -->
-        <a href="https://www.youtube.com/@Voiett" class="channel-card" target="_blank" rel="noopener noreferrer">
+        <div class="channel-card">
           <div class="channel-thumbnail">
             <img src="/voiet.jpg" alt="Voiett Logo" class="channel-logo" />
             <div class="play-icon">▶</div>
@@ -93,11 +97,15 @@ import Layout from '../../layouts/Layout.astro';
               <span class="tag">Gaming</span>
               <span class="tag">Entertainment</span>
             </div>
+            <div class="channel-actions">
+              <a href="/data/voiett" class="stats-btn">Stats Insights</a>
+              <a href="https://www.youtube.com/@Voiett" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
+            </div>
           </div>
-        </a>
+        </div>
 
         <!-- Channel 3: ClipsyGHG -->
-        <a href="https://www.youtube.com/@ClipsyGHG" class="channel-card" target="_blank" rel="noopener noreferrer">
+        <div class="channel-card">
           <div class="channel-thumbnail">
             <img src="/clipsy.jpg" alt="Clipsy Logo" class="channel-logo" />
             <div class="play-icon">▶</div>
@@ -126,11 +134,15 @@ import Layout from '../../layouts/Layout.astro';
               <span class="tag">Gaming</span>
               <span class="tag">Shorts</span>
             </div>
+            <div class="channel-actions">
+              <a href="/data/clipsy" class="stats-btn">Stats Insights</a>
+              <a href="https://www.youtube.com/@ClipsyGHG" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
+            </div>
           </div>
-        </a>
+        </div>
 
         <!-- Channel 4: DemelusShorts -->
-        <a href="https://www.youtube.com/@DemelusShorts" class="channel-card" target="_blank" rel="noopener noreferrer">
+        <div class="channel-card">
           <div class="channel-thumbnail">
             <img src="/demelusshorts.jpg" alt="Demelus Logo" class="channel-logo" />
             <div class="play-icon">▶</div>
@@ -159,11 +171,15 @@ import Layout from '../../layouts/Layout.astro';
               <span class="tag">Info</span>
               <span class="tag">Viral</span>
             </div>
+            <div class="channel-actions">
+              <a href="/data/demelus-shorts" class="stats-btn">Stats Insights</a>
+              <a href="https://www.youtube.com/@DemelusShorts" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
+            </div>
           </div>
-        </a>
+        </div>
 
         <!-- Channel 5: DemelusPlus -->
-        <a href="https://www.youtube.com/@DemelusPlus" class="channel-card" target="_blank" rel="noopener noreferrer">
+        <div class="channel-card">
           <div class="channel-thumbnail">
             <img src="/demelusplus.jpg" alt="Demelus Plus Logo" class="channel-logo" />
             <div class="play-icon">▶</div>
@@ -191,11 +207,15 @@ import Layout from '../../layouts/Layout.astro';
               <span class="tag">Longform</span>
               <span class="tag">Entertainment</span>
             </div>
+            <div class="channel-actions">
+              <a href="/data/demelus-plus" class="stats-btn">Stats Insights</a>
+              <a href="https://www.youtube.com/@DemelusPlus" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
+            </div>
           </div>
-        </a>
+        </div>
 
         <!-- Channel 6: Demelus -->
-        <a href="https://www.youtube.com/@Demelus" class="channel-card" target="_blank" rel="noopener noreferrer">
+        <div class="channel-card">
           <div class="channel-thumbnail">
             <img src="/demelus.jpg" alt="Demelus Logo" class="channel-logo" />
             <div class="play-icon">▶</div>
@@ -223,11 +243,15 @@ import Layout from '../../layouts/Layout.astro';
               <span class="tag">Longform</span>
               <span class="tag">Entertainment</span>
             </div>
+            <div class="channel-actions">
+              <a href="/data/demelus" class="stats-btn">Stats Insights</a>
+              <a href="https://www.youtube.com/@Demelus" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
+            </div>
           </div>
-        </a>
+        </div>
 
         <!-- Channel 7: AmidusTv -->
-        <a href="https://www.youtube.com/@AmidusTV" class="channel-card" target="_blank" rel="noopener noreferrer">
+        <div class="channel-card">
           <div class="channel-thumbnail">
             <img src="/amidus.jpg" alt="Amidus Logo" class="channel-logo" />
             <div class="play-icon">▶</div>
@@ -256,8 +280,12 @@ import Layout from '../../layouts/Layout.astro';
               <span class="tag">Info</span>
               <span class="tag">Viral</span>
             </div>
+            <div class="channel-actions">
+              <a href="/data/amidus" class="stats-btn">Stats Insights</a>
+              <a href="https://www.youtube.com/@AmidusTV" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
+            </div>
           </div>
-        </a>
+        </div>
       </div>
 
       <!-- Additional Info -->
@@ -483,6 +511,55 @@ import Layout from '../../layouts/Layout.astro';
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .channel-actions {
+    display: flex;
+    gap: 0.8rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 212, 255, 0.2);
+    margin-top: auto;
+  }
+
+  .stats-btn {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 212, 255, 0.1);
+    color: #00D4FF;
+    text-decoration: none;
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .stats-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: #00D4FF;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+  }
+
+  .youtube-btn {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #FF0000, #DD0000);
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    border: none;
+  }
+
+  .youtube-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
   }
 
   .tag {
@@ -813,11 +890,28 @@ import Layout from '../../layouts/Layout.astro';
 
     .channel-tags {
       gap: 0.3rem;
+      margin-bottom: 0.8rem;
     }
 
     .tag {
       padding: 0.25rem 0.5rem;
       font-size: 0.7rem;
+    }
+
+    .channel-actions {
+      flex-direction: column;
+      gap: 0.5rem;
+      padding-top: 0.8rem;
+    }
+
+    .stats-btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.75rem;
+    }
+
+    .youtube-btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.75rem;
     }
 
     .additional-info {
