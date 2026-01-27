@@ -18,8 +18,6 @@ npm install
 npm run dev
 ```
 
-Visit `http://localhost:4321` to see your site.
-
 ### Build
 
 ```bash
