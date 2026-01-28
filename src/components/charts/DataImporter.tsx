@@ -36,7 +36,7 @@ export default function DataImporter({ slug, dataType, onImportSuccess }: DataIm
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [importType, setImportType] = useState<'daily_views' | 'daily_subscribers' | 'daily_uploads' | 'minecraft'>('daily_views');
+  const [importType, setImportType] = useState<'daily_views' | 'daily_subscribers' | 'daily_uploads' | 'daily_user' | 'daily_peak_online' | 'weekly_user' | 'alltime_user' | 'daily_sessions'>('daily_views');
 
   const handleFileImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -60,18 +60,15 @@ export default function DataImporter({ slug, dataType, onImportSuccess }: DataIm
             } as YouTubeDailyData;
           });
       } else {
+        // Minecraft: single metric per import
         data = lines
           .slice(1)
           .map(line => {
-            const [date, daily_user, daily_peak_online, weekly_user, alltime_user, daily_sessions] = line.split(',');
+            const [date, value] = line.split(',');
             return {
               date: date.trim(),
-              daily_user: parseInt(daily_user.trim()),
-              daily_peak_online: parseInt(daily_peak_online.trim()),
-              weekly_user: parseInt(weekly_user.trim()),
-              alltime_user: parseInt(alltime_user.trim()),
-              daily_sessions: parseInt(daily_sessions.trim())
-            } as MinecraftData;
+              [importType]: parseInt(value.trim())
+            } as any as MinecraftData;
           });
       }
 
@@ -95,7 +92,7 @@ export default function DataImporter({ slug, dataType, onImportSuccess }: DataIm
         body: JSON.stringify({ 
           channel_slug: slug, 
           data,
-          metricType: serverType === 'youtube' ? importType : undefined
+          metricType: importType
         })
       });
 
@@ -183,21 +180,56 @@ export default function DataImporter({ slug, dataType, onImportSuccess }: DataIm
               </div>
             </>
           ) : (
-            <div className="file-upload">
-              <label htmlFor="csv-file">
-                Select CSV File
-              </label>
-              <input
-                id="csv-file"
-                type="file"
-                accept=".csv"
-                onChange={handleFileImport}
-                disabled={loading}
-              />
-              <p className="help-text">
-                CSV Format: date,daily_user,daily_peak_online,weekly_user,alltime_user,daily_sessions
-              </p>
-            </div>
+            <>
+              <div className="importer-tabs">
+                <button
+                  className={`importer-tab ${importType === 'daily_user' ? 'active' : ''}`}
+                  onClick={() => setImportType('daily_user')}
+                >
+                  Daily Users
+                </button>
+                <button
+                  className={`importer-tab ${importType === 'daily_peak_online' ? 'active' : ''}`}
+                  onClick={() => setImportType('daily_peak_online')}
+                >
+                  Peak Online
+                </button>
+                <button
+                  className={`importer-tab ${importType === 'weekly_user' ? 'active' : ''}`}
+                  onClick={() => setImportType('weekly_user')}
+                >
+                  Weekly Users
+                </button>
+                <button
+                  className={`importer-tab ${importType === 'alltime_user' ? 'active' : ''}`}
+                  onClick={() => setImportType('alltime_user')}
+                >
+                  All-time Users
+                </button>
+                <button
+                  className={`importer-tab ${importType === 'daily_sessions' ? 'active' : ''}`}
+                  onClick={() => setImportType('daily_sessions')}
+                >
+                  Daily Sessions
+                </button>
+              </div>
+
+              <div className="file-upload">
+                <label htmlFor="csv-file">
+                  Select CSV File
+                </label>
+                <input
+                  id="csv-file"
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileImport}
+                  disabled={loading}
+                />
+                <p className="help-text">
+                  CSV Format: date,value
+                </p>
+              </div>
+            </>
           )}
 
           {message && (

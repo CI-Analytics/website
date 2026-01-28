@@ -47,19 +47,13 @@ export async function POST({ request }) {
           ${metricType} = excluded.${metricType}
       `);
     } else {
-      // Minecraft server
+      // Minecraft server - single metric import
       insertStmt = db.prepare(`
         INSERT INTO channel_analytics 
-        (channel_slug, date, daily_user, daily_peak_online, weekly_user, alltime_user, daily_sessions, growth_rate, engagement_rate)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (channel_slug, date, ${metricType})
+        VALUES (?, ?, ?)
         ON CONFLICT(channel_slug, date) DO UPDATE SET
-          daily_user = excluded.daily_user,
-          daily_peak_online = excluded.daily_peak_online,
-          weekly_user = excluded.weekly_user,
-          alltime_user = excluded.alltime_user,
-          daily_sessions = excluded.daily_sessions,
-          growth_rate = excluded.growth_rate,
-          engagement_rate = excluded.engagement_rate
+          ${metricType} = excluded.${metricType}
       `);
     }
 
@@ -67,38 +61,17 @@ export async function POST({ request }) {
     const insertMany = db.transaction((entries) => {
       let imported = 0;
       
-      if (serverType === 'youtube') {
-        // For YouTube single metric import
-        for (const entry of entries) {
-          try {
-            insertStmt.run(
-              channel_slug,
-              entry.date,
-              entry.value || 0
-            );
-            imported++;
-          } catch (error) {
-            console.error(`Failed to insert record for ${entry.date}:`, error);
-          }
-        }
-      } else {
-        for (const entry of entries) {
-          try {
-            insertStmt.run(
-              channel_slug,
-              entry.date,
-              entry.daily_user || 0,
-              entry.daily_peak_online || 0,
-              entry.weekly_user || 0,
-              entry.alltime_user || 0,
-              entry.daily_sessions || 0,
-              entry.growth_rate || null,
-              entry.engagement_rate || null
-            );
-            imported++;
-          } catch (error) {
-            console.error(`Failed to insert record for ${entry.date}:`, error);
-          }
+      // For both YouTube and Minecraft single metric imports
+      for (const entry of entries) {
+        try {
+          insertStmt.run(
+            channel_slug,
+            entry.date,
+            entry.value || 0
+          );
+          imported++;
+        } catch (error) {
+          console.error(`Failed to insert record for ${entry.date}:`, error);
         }
       }
       return imported;

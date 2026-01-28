@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { db } from '../../lib/db';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 // Get all data repository projects
 const dataProjects = await getCollection('data');
@@ -38,7 +38,7 @@ const getImportStats = (slug: string) => {
 };
 
 const channelsWithData = channels.map(ch => {
-  const dataProject = dataProjects.find(p => p.slug === ch.slug);
+  const dataProject = dataProjects.find((p: CollectionEntry<'data'>) => p.slug === ch.slug);
   return {
     ...ch,
     latest: getLatestData(ch.slug),
@@ -100,9 +100,14 @@ const channelsWithData = channels.map(ch => {
                 <a href={`/data/${project.slug}`} class="project-name-link">
                   <h3 class="project-name">{project.name}</h3>
                 </a>
-                <a href={`/data/${project.slug}`} class="project-settings" title="Edit Project">
-                  ⚙️
-                </a>
+                <div class="project-actions">
+                  <a href={`/admin/analytics/${project.slug}`} class="project-view-data" title="View Data">
+                    📊
+                  </a>
+                  <a href={`/data/${project.slug}`} class="project-settings" title="Edit Project">
+                    ⚙️
+                  </a>
+                </div>
               </div>
               <div class="project-info">
                 <div class="info-row">
@@ -393,6 +398,34 @@ const channelsWithData = channels.map(ch => {
       background: rgba(0, 212, 255, 0.2);
       border-color: rgba(0, 212, 255, 0.4);
       transform: rotate(90deg);
+    }
+
+    .project-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .project-view-data {
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 8px;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .project-view-data:hover {
+      background: rgba(0, 255, 136, 0.2);
+      border-color: rgba(0, 255, 136, 0.4);
+      transform: scale(1.1);
     }
 
     .project-info {

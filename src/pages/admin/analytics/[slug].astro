@@ -1,0 +1,370 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { db } from '../../../lib/db';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+type Props = {
+  params: { slug: string };
+};
+
+export async function getStaticPaths() {
+  const dataProjects = await getCollection('data');
+  return dataProjects.map((project: CollectionEntry<'data'>) => ({
+    params: { slug: project.slug }
+  }));
+}
+
+const { slug } = Astro.params;
+const dataProjects = await getCollection('data');
+
+// Get channel info from channels table or use slug
+let channel = db.prepare(`
+  SELECT * FROM channels WHERE slug = ?
+`).get(slug) as any;
+
+// If not in channels table, create from data repository
+if (!channel) {
+  const dataProject = dataProjects.find((p: CollectionEntry<'data'>) => p.slug === slug);
+  channel = {
+    slug: slug,
+    name: dataProject?.data.title || slug
+  };
+}
+
+// Get all analytics data for this channel, sorted by date descending
+const analyticsData = db.prepare(`
+  SELECT * FROM channel_analytics
+  WHERE channel_slug = ?
+  ORDER BY date DESC
+`).all(slug) as any[];
+
+// Detect server type
+function getServerType(channelSlug: string): 'youtube' | 'minecraft' {
+  const minecraftSlugs = ['msb', 'ycb', 'boom'];
+  return minecraftSlugs.includes(channelSlug) ? 'minecraft' : 'youtube';
+}
+
+const serverType = getServerType(slug);
+
+// Get column names to display
+function getDisplayColumns(type: 'youtube' | 'minecraft'): string[] {
+  const baseColumns = ['date'];
+  if (type === 'youtube') {
+    return [...baseColumns, 'daily_views', 'daily_subscribers', 'daily_uploads'];
+  } else {
+    return [...baseColumns, 'daily_user', 'daily_peak_online', 'weekly_user', 'alltime_user', 'daily_sessions'];
+  }
+}
+
+const displayColumns = getDisplayColumns(serverType);
+
+function formatDate(date: string) {
+  return new Intl.DateTimeFormat('en-US', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  }).format(new Date(date));
+}
+
+function formatNumber(value: any): string {
+  if (value === null || value === undefined) return '—';
+  return parseInt(value).toLocaleString('en-US');
+}
+---
+
+<Layout title={`Analytics Data - ${channel?.name || slug} | CI-Analytics`}>
+  <section class="page-hero">
+    <div class="container">
+      <div class="hero-box">
+        <div class="breadcrumb">
+          <a href="/admin/analytics">← Back to Dashboard</a>
+        </div>
+        <div class="hero-flex">
+          <div class="hero-copy">
+            <p class="eyebrow">Detailed Analytics</p>
+            <h1>{channel?.name || slug}</h1>
+            <p class="hero-subtitle">{analyticsData.length.toLocaleString('en-US')} data points</p>
+            <div class="hero-badges">
+              <span class="pill pill-type">{serverType === 'youtube' ? 'YouTube Channel' : 'Minecraft Server'}</span>
+              <span class="pill pill-muted">Total Records: {analyticsData.length.toLocaleString('en-US')}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container">
+      <div class="data-container">
+        {analyticsData.length > 0 ? (
+          <div class="table-wrapper glass">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  {displayColumns.map(col => (
+                    <th class={col === 'date' ? 'date-col' : ''}>
+                      {col === 'date' ? 'Date' : col.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {analyticsData.map((row) => (
+                  <tr>
+                    {displayColumns.map(col => (
+                      <td class={col === 'date' ? 'date-col' : 'number-col'}>
+                        {col === 'date' ? formatDate(row[col]) : formatNumber(row[col])}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty-state glass">
+            <div class="empty-icon">📭</div>
+            <h2>No Data Points</h2>
+            <p>No analytics data has been imported for this project yet.</p>
+            <a href={`/data/${slug}`} class="action-link">Go to Project Page →</a>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .page-hero {
+      padding: 3.5rem 2rem;
+      padding-top: 5.5rem;
+      background: radial-gradient(circle at 20% 20%, rgba(0, 194, 255, 0.1), transparent 40%),
+        radial-gradient(circle at 80% 0%, rgba(255, 168, 0, 0.08), transparent 35%);
+      color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .hero-box {
+      background: linear-gradient(135deg, rgba(20, 28, 64, 0.9), rgba(9, 13, 32, 0.9));
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 20px;
+      padding: 3rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    .breadcrumb {
+      margin-bottom: 1.25rem;
+    }
+
+    .breadcrumb a {
+      color: rgba(0, 212, 255, 0.9);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      letter-spacing: 0.2px;
+    }
+
+    .breadcrumb a:hover {
+      color: #00D4FF;
+      transform: translateX(-5px);
+    }
+
+    .hero-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .hero-copy h1 {
+      font-size: 3rem;
+      margin: 0.1rem 0 0.9rem 0;
+      background: linear-gradient(135deg, #00D4FF, #00ffa3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin: 0;
+    }
+
+    .hero-subtitle {
+      color: rgba(255, 255, 255, 0.75);
+      margin: 0.5rem 0 1.5rem 0;
+      font-size: 1rem;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      white-space: nowrap;
+    }
+
+    .pill-type {
+      background: rgba(0, 212, 255, 0.15);
+      border-color: rgba(0, 212, 255, 0.3);
+      color: #00D4FF;
+    }
+
+    .pill-muted {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .page-section {
+      padding: 3.5rem 2rem;
+    }
+
+    .data-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .glass {
+      background: linear-gradient(135deg, rgba(16, 23, 48, 0.95) 0%, rgba(9, 12, 30, 0.95) 100%);
+      border: 1px solid rgba(0, 212, 255, 0.15);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      padding: 2rem;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .data-table thead {
+      background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+    }
+
+    .data-table thead tr {
+      border-bottom: 2px solid rgba(0, 212, 255, 0.25);
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 1.2rem 1.5rem;
+      font-weight: 700;
+      color: #00D4FF;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .data-table th.date-col {
+      width: 150px;
+      min-width: 150px;
+    }
+
+    .data-table tbody tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .data-table tbody tr:hover {
+      background: rgba(0, 212, 255, 0.08);
+      border-bottom-color: rgba(0, 212, 255, 0.2);
+    }
+
+    .data-table td {
+      padding: 1.1rem 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .data-table td.date-col {
+      color: #00D4FF;
+      font-weight: 600;
+      width: 150px;
+      min-width: 150px;
+    }
+
+    .data-table td.number-col {
+      text-align: right;
+      font-family: 'Monaco', 'Menlo', monospace;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .empty-state {
+      padding: 4rem 2rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state h2 {
+      color: rgba(255, 255, 255, 0.9);
+      margin: 1rem 0;
+      font-size: 1.8rem;
+    }
+
+    .empty-state p {
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    .action-link {
+      display: inline-block;
+      padding: 0.8rem 1.6rem;
+      background: linear-gradient(135deg, #00D4FF, #0066FF);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .action-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .hero-copy h1 {
+        font-size: 2rem;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+      }
+
+      .hero-badges {
+        flex-direction: column;
+      }
+    }
+  </style>
+</Layout>
