@@ -1,14 +1,14 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
-import node from '@astrojs/node';
+import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://ci-analytics.github.io',
+  site: 'https://ci-analytics.org',
   base: '/',
   output: 'hybrid',
-  adapter: node({
-    mode: 'standalone'
+  adapter: cloudflare({
+    mode: 'directory'
   }),
   integrations: [react()],
 });
