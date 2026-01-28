@@ -1,6 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { db } from '../../lib/db';
+import { getCollection } from 'astro:content';
+
+// Get all data repository projects
+const dataProjects = await getCollection('data');
+const totalProjects = dataProjects.length;
 
 // Get all channels with their latest analytics
 const channels = db.prepare(`
@@ -32,11 +37,15 @@ const getImportStats = (slug: string) => {
   `).get(slug) as any;
 };
 
-const channelsWithData = channels.map(ch => ({
-  ...ch,
-  latest: getLatestData(ch.slug),
-  stats: getImportStats(ch.slug)
-}));
+const channelsWithData = channels.map(ch => {
+  const dataProject = dataProjects.find(p => p.slug === ch.slug);
+  return {
+    ...ch,
+    latest: getLatestData(ch.slug),
+    stats: getImportStats(ch.slug),
+    lastUpdateDate: dataProject?.data.date
+  };
+});
 ---
 
 <Layout title="Analytics Admin Dashboard | CI-Analytics">
@@ -57,7 +66,7 @@ const channelsWithData = channels.map(ch => ({
         <div class="stat-card">
           <div class="stat-icon">📂</div>
           <div class="stat-content">
-            <span class="stat-number">{channelsWithData.length}</span>
+            <span class="stat-number">{totalProjects}</span>
             <span class="stat-text">Total Projects Added</span>
           </div>
         </div>
@@ -65,7 +74,7 @@ const channelsWithData = channels.map(ch => ({
           <div class="stat-icon">📈</div>
           <div class="stat-content">
             <span class="stat-number">
-              {channelsWithData.reduce((sum, ch) => sum + (ch.stats?.total_records || 0), 0)}
+              {channelsWithData.reduce((sum, ch) => sum + (ch.stats?.total_records || 0), 0).toLocaleString('en-US')}
             </span>
             <span class="stat-text">Total Data Points</span>
           </div>
@@ -98,12 +107,12 @@ const channelsWithData = channels.map(ch => ({
               <div class="project-info">
                 <div class="info-row">
                   <span class="info-label">Last Update</span>
-                  <span class="info-value">{project.latest?.date || 'No data'}</span>
+                  <span class="info-value">{project.lastUpdateDate ? new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(project.lastUpdateDate)) : (project.latest?.date || 'No data')}</span>
                 </div>
                 <div class="info-row">
                   <span class="info-label">Data Points</span>
                   <span class="info-value">
-                    <span class="badge">{project.stats?.total_records || 0}</span>
+                    <span class="badge">{(project.stats?.total_records || 0).toLocaleString('en-US')}</span>
                   </span>
                 </div>
               </div>
