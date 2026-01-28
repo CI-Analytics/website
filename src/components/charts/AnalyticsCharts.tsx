@@ -3,10 +3,9 @@ import Chart from 'chart.js/auto';
 
 interface YouTubeAnalyticsData {
   date: string;
-  subscribers: number;
-  views: number;
-  videos: number;
-  avg_views_per_video: number;
+  daily_views: number;
+  daily_subscribers: number;
+  daily_uploads: number;
 }
 
 interface MinecraftAnalyticsData {
@@ -84,9 +83,8 @@ export default function AnalyticsCharts({ slug, dataType }: ChartsProps) {
     chartsRef.current.forEach(chart => chart.destroy());
     chartsRef.current = [];
 
-    // Nur jeden N-ten Datenpunkt auf X-Achse anzeigen für bessere Lesbarkeit
-    const step = Math.ceil(analytics.length / 12);
-    const dates = analytics.map((a, i) => (i % step === 0 ? a.date : ''));
+    // Alle Daten für Labels, Chart.js wird automatisch filtern
+    const dates = analytics.map(a => a.date);
 
     const baseChartConfig = {
       responsive: true,
@@ -109,7 +107,13 @@ export default function AnalyticsCharts({ slug, dataType }: ChartsProps) {
           beginAtZero: false
         },
         x: {
-          ticks: { color: 'rgba(255, 255, 255, 0.6)' },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.6)',
+            maxRotation: 45,
+            minRotation: 45,
+            maxTicksLimit: 8,
+            autoSkip: true
+          },
           grid: { color: 'rgba(255, 255, 255, 0.1)' }
         }
       }
@@ -117,11 +121,29 @@ export default function AnalyticsCharts({ slug, dataType }: ChartsProps) {
 
     if (serverType === 'youtube') {
       const youtubeData = analytics as YouTubeAnalyticsData[];
-      const subscribers = youtubeData.map(a => a.subscribers);
-      const views = youtubeData.map(a => a.views);
-      const avgViews = youtubeData.map(a => a.avg_views_per_video);
+      const dailyViews = youtubeData.map(a => a.daily_views || 0);
+      const dailySubscribers = youtubeData.map(a => a.daily_subscribers || 0);
+      const dailyUploads = youtubeData.map(a => a.daily_uploads || 0);
 
-      // Subscribers Chart
+      const totalSubscribers = dailySubscribers.reduce((acc: number[], val) => {
+        const last = acc.length > 0 ? acc[acc.length - 1] : 0;
+        acc.push(last + (val || 0));
+        return acc;
+      }, []);
+
+      const totalViews = dailyViews.reduce((acc: number[], val) => {
+        const last = acc.length > 0 ? acc[acc.length - 1] : 0;
+        acc.push(last + (val || 0));
+        return acc;
+      }, []);
+
+      const totalVideos = dailyUploads.reduce((acc: number[], val) => {
+        const last = acc.length > 0 ? acc[acc.length - 1] : 0;
+        acc.push(last + (val || 0));
+        return acc;
+      }, []);
+
+      // Total Subscribers Chart
       if (subscribersChartRef.current) {
         const ctx = subscribersChartRef.current.getContext('2d');
         if (ctx) {
@@ -130,8 +152,8 @@ export default function AnalyticsCharts({ slug, dataType }: ChartsProps) {
             data: {
               labels: dates,
               datasets: [{
-                label: 'Subscribers',
-                data: subscribers,
+                label: 'Total Subscribers',
+                data: totalSubscribers,
                 borderColor: '#00D4FF',
                 backgroundColor: 'rgba(0, 212, 255, 0.1)',
                 borderWidth: 2,
@@ -156,7 +178,7 @@ export default function AnalyticsCharts({ slug, dataType }: ChartsProps) {
         }
       }
 
-      // Views Chart
+      // Total Views Chart
       if (viewsChartRef.current) {
         const ctx = viewsChartRef.current.getContext('2d');
         if (ctx) {
@@ -166,7 +188,7 @@ export default function AnalyticsCharts({ slug, dataType }: ChartsProps) {
               labels: dates,
               datasets: [{
                 label: 'Total Views',
-                data: views,
+                data: totalViews,
                 borderColor: '#00FF88',
                 backgroundColor: 'rgba(0, 255, 136, 0.1)',
                 borderWidth: 2,
@@ -182,7 +204,7 @@ export default function AnalyticsCharts({ slug, dataType }: ChartsProps) {
         }
       }
 
-      // Avg Views Per Video Chart
+      // Total Videos Chart
       if (engagementChartRef.current) {
         const ctx = engagementChartRef.current.getContext('2d');
         if (ctx) {
@@ -191,8 +213,8 @@ export default function AnalyticsCharts({ slug, dataType }: ChartsProps) {
             data: {
               labels: dates,
               datasets: [{
-                label: 'Avg Views per Video',
-                data: avgViews,
+                label: 'Total Videos',
+                data: totalVideos,
                 borderColor: '#FFB800',
                 backgroundColor: 'rgba(255, 184, 0, 0.1)',
                 borderWidth: 2,
@@ -328,19 +350,19 @@ export default function AnalyticsCharts({ slug, dataType }: ChartsProps) {
         {serverType === 'youtube' ? (
           <>
             <div className="chart-box">
-              <h4>Subscribers Over Time</h4>
+              <h4>Total Subscribers</h4>
               <div className="chart-wrapper">
                 <canvas ref={subscribersChartRef}></canvas>
               </div>
             </div>
             <div className="chart-box">
-              <h4>Total Views Over Time</h4>
+              <h4>Total Views</h4>
               <div className="chart-wrapper">
                 <canvas ref={viewsChartRef}></canvas>
               </div>
             </div>
             <div className="chart-box">
-              <h4>Avg Views per Video</h4>
+              <h4>Total Videos</h4>
               <div className="chart-wrapper">
                 <canvas ref={engagementChartRef}></canvas>
               </div>

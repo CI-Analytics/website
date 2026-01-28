@@ -12,10 +12,10 @@ function getServerType(slug) {
 export async function POST({ request }) {
   try {
     const body = await request.json();
-    const { channel_slug, data } = body;
+    const { channel_slug, data, metricType } = body;
     const serverType = getServerType(channel_slug);
 
-    console.log('Import request received:', { channel_slug, serverType, dataCount: data?.length });
+    console.log('Import request received:', { channel_slug, serverType, metricType, dataCount: data?.length });
 
     if (!channel_slug || !Array.isArray(data)) {
       return new Response(JSON.stringify({ error: 'Invalid request format' }), {
@@ -38,17 +38,13 @@ export async function POST({ request }) {
     let insertStmt;
     
     if (serverType === 'youtube') {
+      // For YouTube, single metric import
       insertStmt = db.prepare(`
         INSERT INTO channel_analytics 
-        (channel_slug, date, subscribers, views, videos, avg_views_per_video, growth_rate, engagement_rate)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        (channel_slug, date, ${metricType})
+        VALUES (?, ?, ?)
         ON CONFLICT(channel_slug, date) DO UPDATE SET
-          subscribers = excluded.subscribers,
-          views = excluded.views,
-          videos = excluded.videos,
-          avg_views_per_video = excluded.avg_views_per_video,
-          growth_rate = excluded.growth_rate,
-          engagement_rate = excluded.engagement_rate
+          ${metricType} = excluded.${metricType}
       `);
     } else {
       // Minecraft server
@@ -70,20 +66,24 @@ export async function POST({ request }) {
     // Begin transaction
     const insertMany = db.transaction((entries) => {
       let imported = 0;
-      for (const entry of entries) {
-        try {
-          if (serverType === 'youtube') {
+      
+      if (serverType === 'youtube') {
+        // For YouTube single metric import
+        for (const entry of entries) {
+          try {
             insertStmt.run(
               channel_slug,
               entry.date,
-              entry.subscribers || 0,
-              entry.views || 0,
-              entry.videos || 0,
-              entry.avg_views_per_video || 0,
-              entry.growth_rate || null,
-              entry.engagement_rate || null
+              entry.value || 0
             );
-          } else {
+            imported++;
+          } catch (error) {
+            console.error(`Failed to insert record for ${entry.date}:`, error);
+          }
+        }
+      } else {
+        for (const entry of entries) {
+          try {
             insertStmt.run(
               channel_slug,
               entry.date,
@@ -95,10 +95,10 @@ export async function POST({ request }) {
               entry.growth_rate || null,
               entry.engagement_rate || null
             );
+            imported++;
+          } catch (error) {
+            console.error(`Failed to insert record for ${entry.date}:`, error);
           }
-          imported++;
-        } catch (error) {
-          console.error(`Failed to insert record for ${entry.date}:`, error);
         }
       }
       return imported;

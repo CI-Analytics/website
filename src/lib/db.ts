@@ -27,8 +27,9 @@ export function initializeDatabase() {
       -- YouTube metrics
       subscribers INTEGER,
       views INTEGER,
-      videos INTEGER,
-      avg_views_per_video REAL,
+      daily_subscribers INTEGER,
+      daily_views INTEGER,
+      daily_uploads INTEGER,
       -- Minecraft metrics
       daily_user INTEGER,
       daily_peak_online INTEGER,
