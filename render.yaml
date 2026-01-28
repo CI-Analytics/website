@@ -2,9 +2,9 @@ services:
   - type: web
     name: ci-analytics
     env: node
-    rootDir: website
     buildCommand: npm install && npm run build
     startCommand: node ./dist/server/entry.mjs
+    port: 3000
     envVars:
       - key: NODE_VERSION
         value: 22.16.0
