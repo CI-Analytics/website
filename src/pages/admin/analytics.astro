@@ -55,10 +55,10 @@ const channelsWithData = channels.map(ch => ({
     <div class="container">
       <div class="admin-stats">
         <div class="stat-card">
-          <div class="stat-icon">📺</div>
+          <div class="stat-icon">📂</div>
           <div class="stat-content">
             <span class="stat-number">{channelsWithData.length}</span>
-            <span class="stat-text">Total Channels</span>
+            <span class="stat-text">Total Projects</span>
           </div>
         </div>
         <div class="stat-card">
@@ -76,67 +76,39 @@ const channelsWithData = channels.map(ch => ({
             <span class="stat-number">
               {channelsWithData.filter(ch => ch.latest).length}
             </span>
-            <span class="stat-text">Channels with Data</span>
+            <span class="stat-text">Projects with Data</span>
           </div>
         </div>
       </div>
 
       <div class="admin-content">
-        <h2>Channel Analytics Overview</h2>
+        <h2>Project Analytics Overview</h2>
         
-        <div class="channels-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Channel Name</th>
-                <th>Last Update</th>
-                <th>Subscribers</th>
-                <th>Total Views</th>
-                <th>Videos</th>
-                <th>Data Points</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {channelsWithData.map(channel => (
-                <tr>
-                  <td>
-                    <strong>{channel.name}</strong>
-                    <br />
-                    <span class="slug">{channel.slug}</span>
-                  </td>
-                  <td>
-                    {channel.latest?.date || 'No data'}
-                  </td>
-                  <td>
-                    {channel.latest?.subscribers 
-                      ? (channel.latest.subscribers / 1000).toFixed(1) + 'K'
-                      : '-'
-                    }
-                  </td>
-                  <td>
-                    {channel.latest?.views 
-                      ? (channel.latest.views / 1000000).toFixed(2) + 'M'
-                      : '-'
-                    }
-                  </td>
-                  <td>
-                    {channel.latest?.videos || '-'}
-                  </td>
-                  <td>
-                    <span class="badge">
-                      {channel.stats?.total_records || 0}
-                    </span>
-                  </td>
-                  <td>
-                    <a href={`/data/${channel.slug}`} class="action-link">
-                      View & Edit →
-                    </a>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div class="projects-grid">
+          {channelsWithData.map(project => (
+            <div class="project-card">
+              <div class="project-header">
+                <a href={`/data/${project.slug}`} class="project-name-link">
+                  <h3 class="project-name">{project.name}</h3>
+                </a>
+                <a href={`/data/${project.slug}`} class="project-settings" title="Edit Project">
+                  ⚙️
+                </a>
+              </div>
+              <div class="project-info">
+                <div class="info-row">
+                  <span class="info-label">Last Update</span>
+                  <span class="info-value">{project.latest?.date || 'No data'}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Data Points</span>
+                  <span class="info-value">
+                    <span class="badge">{project.stats?.total_records || 0}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div class="admin-info">
@@ -340,6 +312,103 @@ const channelsWithData = channels.map(ch => ({
       margin-bottom: 2.5rem;
       border-radius: 16px;
       border: 1px solid rgba(0, 212, 255, 0.1);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .project-card {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(0, 102, 255, 0.04) 100%);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .project-card:hover {
+      border-color: rgba(0, 212, 255, 0.5);
+      box-shadow: 0 12px 30px rgba(0, 212, 255, 0.15);
+      transform: translateY(-4px);
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.12) 0%, rgba(0, 102, 255, 0.06) 100%);
+    }
+
+    .project-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+      gap: 1rem;
+    }
+
+    .project-name-link {
+      flex: 1;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .project-name {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .project-name-link:hover .project-name {
+      color: #00D4FF;
+    }
+
+    .project-settings {
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 8px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .project-settings:hover {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: rgba(0, 212, 255, 0.4);
+      transform: rotate(90deg);
+    }
+
+    .project-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .info-label {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .info-value {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
     }
 
     table {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-interface ImportData {
+interface YouTubeData {
   date: string;
   subscribers: number;
   views: number;
@@ -8,17 +8,41 @@ interface ImportData {
   avg_views_per_video: number;
 }
 
+interface MinecraftData {
+  date: string;
+  daily_user: number;
+  daily_peak_online: number;
+  weekly_user: number;
+  alltime_user: number;
+  daily_sessions: number;
+}
+
+type ImportData = YouTubeData | MinecraftData;
+
 interface DataImporterProps {
   slug: string;
+  dataType?: string;
   onImportSuccess?: () => void;
 }
 
-export default function DataImporter({ slug, onImportSuccess }: DataImporterProps) {
+// Detect server type from slug or dataType prop
+function getServerType(slug: string, dataType?: string): 'youtube' | 'minecraft' {
+  if (dataType) {
+    return dataType.toLowerCase().includes('minecraft') ? 'minecraft' : 'youtube';
+  }
+  const minecraftSlugs = ['msb', 'ycb', 'boom'];
+  return minecraftSlugs.includes(slug) ? 'minecraft' : 'youtube';
+}
+
+export default function DataImporter({ slug, dataType, onImportSuccess }: DataImporterProps) {
+  const serverType = getServerType(slug, dataType);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [importMethod, setImportMethod] = useState<'manual' | 'file'>('manual');
-  const [formData, setFormData] = useState({
+
+  // YouTube form state
+  const [youtubeFormData, setYoutubeFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     subscribers: '',
     views: '',
@@ -26,9 +50,24 @@ export default function DataImporter({ slug, onImportSuccess }: DataImporterProp
     avg_views_per_video: ''
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Minecraft form state
+  const [minecraftFormData, setMinecraftFormData] = useState({
+    date: new Date().toISOString().split('T')[0],
+    daily_user: '',
+    daily_peak_online: '',
+    weekly_user: '',
+    alltime_user: '',
+    daily_sessions: ''
+  });
+
+  const handleYoutubeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setYoutubeFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleMinecraftInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setMinecraftFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,19 +79,36 @@ export default function DataImporter({ slug, onImportSuccess }: DataImporterProp
       const text = await file.text();
       const lines = text.trim().split('\n');
 
-      // Expect CSV format: date,subscribers,views,videos,avg_views_per_video
-      const data: ImportData[] = lines
-        .slice(1) // Skip header
-        .map(line => {
-          const [date, subscribers, views, videos, avg_views_per_video] = line.split(',');
-          return {
-            date: date.trim(),
-            subscribers: parseInt(subscribers.trim()),
-            views: parseInt(views.trim()),
-            videos: parseInt(videos.trim()),
-            avg_views_per_video: parseFloat(avg_views_per_video.trim())
-          };
-        });
+      let data: ImportData[];
+
+      if (serverType === 'youtube') {
+        data = lines
+          .slice(1)
+          .map(line => {
+            const [date, subscribers, views, videos, avg_views_per_video] = line.split(',');
+            return {
+              date: date.trim(),
+              subscribers: parseInt(subscribers.trim()),
+              views: parseInt(views.trim()),
+              videos: parseInt(videos.trim()),
+              avg_views_per_video: parseFloat(avg_views_per_video.trim())
+            } as YouTubeData;
+          });
+      } else {
+        data = lines
+          .slice(1)
+          .map(line => {
+            const [date, daily_user, daily_peak_online, weekly_user, alltime_user, daily_sessions] = line.split(',');
+            return {
+              date: date.trim(),
+              daily_user: parseInt(daily_user.trim()),
+              daily_peak_online: parseInt(daily_peak_online.trim()),
+              weekly_user: parseInt(weekly_user.trim()),
+              alltime_user: parseInt(alltime_user.trim()),
+              daily_sessions: parseInt(daily_sessions.trim())
+            } as MinecraftData;
+          });
+      }
 
       await submitImport(data);
     } catch (error) {
@@ -68,13 +124,26 @@ export default function DataImporter({ slug, onImportSuccess }: DataImporterProp
   const handleManualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const data: ImportData[] = [{
-      date: formData.date,
-      subscribers: parseInt(formData.subscribers),
-      views: parseInt(formData.views),
-      videos: parseInt(formData.videos),
-      avg_views_per_video: parseFloat(formData.avg_views_per_video)
-    }];
+    let data: ImportData[];
+
+    if (serverType === 'youtube') {
+      data = [{
+        date: youtubeFormData.date,
+        subscribers: parseInt(youtubeFormData.subscribers),
+        views: parseInt(youtubeFormData.views),
+        videos: parseInt(youtubeFormData.videos),
+        avg_views_per_video: parseFloat(youtubeFormData.avg_views_per_video)
+      } as YouTubeData];
+    } else {
+      data = [{
+        date: minecraftFormData.date,
+        daily_user: parseInt(minecraftFormData.daily_user),
+        daily_peak_online: parseInt(minecraftFormData.daily_peak_online),
+        weekly_user: parseInt(minecraftFormData.weekly_user),
+        alltime_user: parseInt(minecraftFormData.alltime_user),
+        daily_sessions: parseInt(minecraftFormData.daily_sessions)
+      } as MinecraftData];
+    }
 
     await submitImport(data);
   };
@@ -100,33 +169,52 @@ export default function DataImporter({ slug, onImportSuccess }: DataImporterProp
         text: `✓ Successfully imported ${result.recordsImported} records`
       });
 
-      setFormData({
-        date: new Date().toISOString().split('T')[0],
-        subscribers: '',
-        views: '',
-        videos: '',
-        avg_views_per_video: ''
-      });
+      // Reset form
+      if (serverType === 'youtube') {
+        setYoutubeFormData({
+          date: new Date().toISOString().split('T')[0],
+          subscribers: '',
+          views: '',
+          videos: '',
+          avg_views_per_video: ''
+        });
+      } else {
+        setMinecraftFormData({
+          date: new Date().toISOString().split('T')[0],
+          daily_user: '',
+          daily_peak_online: '',
+          weekly_user: '',
+          alltime_user: '',
+          daily_sessions: ''
+        });
+      }
 
-      onImportSuccess?.();
-      setTimeout(() => setIsOpen(false), 2000);
+      if (onImportSuccess) onImportSuccess();
+
+      setTimeout(() => {
+        setMessage(null);
+        setIsOpen(false);
+      }, 2000);
     } catch (error) {
+      console.error('Import error:', error);
       setMessage({
         type: 'error',
-        text: error instanceof Error ? error.message : 'An error occurred'
+        text: error instanceof Error ? error.message : 'Failed to import data'
       });
     } finally {
       setLoading(false);
     }
   };
 
+
   return (
     <div className="data-importer">
       <button
         className="import-btn"
         onClick={() => setIsOpen(!isOpen)}
+        disabled={loading}
       >
-        {isOpen ? '✕ Close' : '+ Import Data'}
+        {isOpen ? '✕ Close' : '➕ Import Data'}
       </button>
 
       {isOpen && (
@@ -148,67 +236,126 @@ export default function DataImporter({ slug, onImportSuccess }: DataImporterProp
             </button>
           </div>
 
-          {importMethod === 'manual' ? (
+          {importMethod === 'manual' && (
             <form onSubmit={handleManualSubmit} className="import-form">
               <div className="form-group">
                 <label>Date</label>
                 <input
                   type="date"
                   name="date"
-                  value={formData.date}
-                  onChange={handleInputChange}
+                  value={serverType === 'youtube' ? youtubeFormData.date : minecraftFormData.date}
+                  onChange={serverType === 'youtube' ? handleYoutubeInputChange : handleMinecraftInputChange}
                   required
                 />
               </div>
 
-              <div className="form-group">
-                <label>Subscribers</label>
-                <input
-                  type="number"
-                  name="subscribers"
-                  value={formData.subscribers}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 151000"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Total Views</label>
-                <input
-                  type="number"
-                  name="views"
-                  value={formData.views}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 31000000"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Total Videos</label>
-                <input
-                  type="number"
-                  name="videos"
-                  value={formData.videos}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 400"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Avg Views per Video</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  name="avg_views_per_video"
-                  value={formData.avg_views_per_video}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 77500"
-                  required
-                />
-              </div>
+              {serverType === 'youtube' ? (
+                <>
+                  <div className="form-group">
+                    <label>Subscribers</label>
+                    <input
+                      type="number"
+                      name="subscribers"
+                      value={youtubeFormData.subscribers}
+                      onChange={handleYoutubeInputChange}
+                      placeholder="e.g., 151000"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Total Views</label>
+                    <input
+                      type="number"
+                      name="views"
+                      value={youtubeFormData.views}
+                      onChange={handleYoutubeInputChange}
+                      placeholder="e.g., 31000000"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Total Videos</label>
+                    <input
+                      type="number"
+                      name="videos"
+                      value={youtubeFormData.videos}
+                      onChange={handleYoutubeInputChange}
+                      placeholder="e.g., 400"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Avg Views per Video</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      name="avg_views_per_video"
+                      value={youtubeFormData.avg_views_per_video}
+                      onChange={handleYoutubeInputChange}
+                      placeholder="e.g., 77500"
+                      required
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="form-group">
+                    <label>Daily Users</label>
+                    <input
+                      type="number"
+                      name="daily_user"
+                      value={minecraftFormData.daily_user}
+                      onChange={handleMinecraftInputChange}
+                      placeholder="e.g., 1250"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Daily Peak Online</label>
+                    <input
+                      type="number"
+                      name="daily_peak_online"
+                      value={minecraftFormData.daily_peak_online}
+                      onChange={handleMinecraftInputChange}
+                      placeholder="e.g., 320"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Weekly Users</label>
+                    <input
+                      type="number"
+                      name="weekly_user"
+                      value={minecraftFormData.weekly_user}
+                      onChange={handleMinecraftInputChange}
+                      placeholder="e.g., 4500"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Alltime Users</label>
+                    <input
+                      type="number"
+                      name="alltime_user"
+                      value={minecraftFormData.alltime_user}
+                      onChange={handleMinecraftInputChange}
+                      placeholder="e.g., 50000"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Daily Sessions</label>
+                    <input
+                      type="number"
+                      name="daily_sessions"
+                      value={minecraftFormData.daily_sessions}
+                      onChange={handleMinecraftInputChange}
+                      placeholder="e.g., 8200"
+                      required
+                    />
+                  </div>
+                </>
+              )}
 
               <button
                 type="submit"
@@ -218,7 +365,9 @@ export default function DataImporter({ slug, onImportSuccess }: DataImporterProp
                 {loading ? 'Importing...' : 'Import Record'}
               </button>
             </form>
-          ) : (
+          )}
+
+          {importMethod === 'file' && (
             <div className="file-upload">
               <label htmlFor="csv-file">
                 Select CSV File
@@ -231,7 +380,10 @@ export default function DataImporter({ slug, onImportSuccess }: DataImporterProp
                 disabled={loading}
               />
               <p className="help-text">
-                CSV Format: date,subscribers,views,videos,avg_views_per_video
+                {serverType === 'youtube'
+                  ? 'CSV Format: date,subscribers,views,videos,avg_views_per_video'
+                  : 'CSV Format: date,daily_user,daily_peak_online,weekly_user,alltime_user,daily_sessions'
+                }
               </p>
             </div>
           )}
@@ -250,6 +402,7 @@ export default function DataImporter({ slug, onImportSuccess }: DataImporterProp
         }
 
         .import-btn {
+          width: 100%;
           background: linear-gradient(135deg, #00D4FF, #0066FF);
           color: white;
           border: none;
@@ -261,9 +414,14 @@ export default function DataImporter({ slug, onImportSuccess }: DataImporterProp
           transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .import-btn:hover {
+        .import-btn:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .import-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
         }
 
         .import-panel {
@@ -358,6 +516,7 @@ export default function DataImporter({ slug, onImportSuccess }: DataImporterProp
           color: rgba(255, 255, 255, 0.5);
           font-size: 0.85rem;
           margin: 0;
+          font-family: monospace;
         }
 
         .submit-btn {

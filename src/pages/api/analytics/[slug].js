@@ -7,12 +7,11 @@ export async function GET({ params }) {
   const { slug } = params;
 
   try {
-    // Get analytics data for the channel (last 90 days)
+    // Get analytics data for the channel (all data, oldest first)
     const analytics = db.prepare(`
       SELECT * FROM channel_analytics
       WHERE channel_slug = ?
-      ORDER BY date DESC
-      LIMIT 90
+      ORDER BY date ASC
     `).all(slug);
 
     // Get import history
@@ -39,7 +38,7 @@ export async function GET({ params }) {
     return new Response(JSON.stringify({
       success: true,
       channel: slug,
-      analytics: analytics.reverse(), // Chronologische Reihenfolge (älteste zuerst)
+      analytics: analytics, // Already in chronological order (oldest first)
       imports,
       summary
     }), {

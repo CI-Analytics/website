@@ -18,16 +18,24 @@ db.pragma('foreign_keys = ON');
 
 // Initialize tables
 export function initializeDatabase() {
-  // Channel Analytics Data
+  // Channel Analytics Data - supports both YouTube and Minecraft
   db.exec(`
     CREATE TABLE IF NOT EXISTS channel_analytics (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       channel_slug TEXT NOT NULL,
       date DATE NOT NULL,
+      -- YouTube metrics
       subscribers INTEGER,
       views INTEGER,
       videos INTEGER,
       avg_views_per_video REAL,
+      -- Minecraft metrics
+      daily_user INTEGER,
+      daily_peak_online INTEGER,
+      weekly_user INTEGER,
+      alltime_user INTEGER,
+      daily_sessions INTEGER,
+      -- Metadata
       growth_rate REAL,
       engagement_rate REAL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

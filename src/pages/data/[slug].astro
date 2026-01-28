@@ -66,7 +66,7 @@ function formatDate(date: Date) {
 
           <!-- Analytics Charts -->
           <div class="analytics-charts-card glass">
-            <AnalyticsCharts client:load slug={entry.slug} />
+            <AnalyticsCharts client:load slug={entry.slug} dataType={entry.data.type} />
           </div>
 
           <div class="data-footer">
@@ -118,7 +118,7 @@ function formatDate(date: Date) {
           <!-- Analytics Import -->
           <div class="analytics-section">
             <h2>📊 Live Analytics Dashboard</h2>
-            <DataImporter client:load slug={entry.slug} />
+            <DataImporter client:load slug={entry.slug} dataType={entry.data.type} />
           </div>
         </aside>
       </div>
