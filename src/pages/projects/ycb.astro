@@ -1,5 +1,87 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+
+// Channel data array - update this to automatically recalculate portfolio stats
+interface ChannelData {
+  name: string;
+  description: string;
+  image: string;
+  slug: string;
+  youtubeUrl: string;
+  subscribers: number; // in actual numbers (e.g., 151000 for 151K)
+  views: number; // in actual numbers
+  videos: number;
+  status: 'active' | 'inactive';
+}
+
+const channels: ChannelData[] = [
+  { name: "Your Sound Effects", description: "Uploads viral sound effects and meme videos with engaging and entertaining content.", image: "/yoursoundeffects.jpg", slug: "your-sound-effects", youtubeUrl: "https://www.youtube.com/@yoursoundeffects2.013", subscribers: 151000, views: 31000000, videos: 400, status: 'inactive' },
+  { name: "Tiimon", description: "Consistent Minecraft gaming content. Testing sustainable long-term production and monetization strategies.", image: "/tiimon.jpg", slug: "tiimon", youtubeUrl: "https://www.youtube.com/@Tiimon_", subscribers: 141000, views: 53000000, videos: 3000, status: 'active' },
+  { name: "Demelus Shorts", description: "Viral informational shorts. Short-form content optimized for mobile and maximum reach.", image: "/demelusshorts.jpg", slug: "demelus-shorts", youtubeUrl: "https://www.youtube.com/@DemelusShorts", subscribers: 103000, views: 42500000, videos: 100, status: 'inactive' },
+  { name: "Smerchy", description: "Minecraft gaming shorts with fast-paced entertainment and engaging gameplay moments.", image: "/smerchy.jpg", slug: "smerchy", youtubeUrl: "https://www.youtube.com/@smerchyy", subscribers: 103000, views: 20000000, videos: 1000, status: 'active' },
+  { name: "Amidus", description: "Viral long-form informational videos on trending topics. High-quality content for maximum engagement.", image: "/amidus.jpg", slug: "amidus", youtubeUrl: "https://www.youtube.com/@AmidusTV", subscribers: 65500, views: 8000000, videos: 43, status: 'active' },
+  { name: "Voiet", description: "Consistent Minecraft gaming content like Tiimon. Exploring sustainable long-term production and revenue generation.", image: "/voiet.jpg", slug: "voiett", youtubeUrl: "https://www.youtube.com/@Voiett", subscribers: 50000, views: 10000000, videos: 800, status: 'active' },
+  { name: "Stats Crafter", description: "Statistic videos and data visualization videos about other YouTubers subscriber counts and growth analytics.", image: "/statscrafter.jpg", slug: "stats-crafter", youtubeUrl: "https://www.youtube.com/@StatsCrafter", subscribers: 42300, views: 17700000, videos: 250, status: 'inactive' },
+  { name: "Butty", description: "Shorts minigames and performance test shorts designed to gain subscribers and increase engagement.", image: "/butty.jpg", slug: "butty", youtubeUrl: "https://www.youtube.com/@Butty-TV", subscribers: 40000, views: 2000000, videos: 400, status: 'inactive' },
+  { name: "Kekskuchen", description: "Streamer clips with the best moments from live gaming sessions and entertaining reactions.", image: "/kekskuchen.jpg", slug: "kekskuchen", youtubeUrl: "https://www.youtube.com/@Kekskuchenn", subscribers: 23000, views: 2500000, videos: 250, status: 'inactive' },
+  { name: "Smerchy Shortz", description: "Short-form viral gaming content optimized for maximum reach and engagement.", image: "/smerchyshortz.jpg", slug: "smerchy-shortz", youtubeUrl: "https://www.youtube.com/@smerchyshortz", subscribers: 18000, views: 11600000, videos: 100, status: 'inactive' },
+  { name: "Demelus", description: "Fast and summarizing long-form informative content on popular topics.", image: "/demelus.jpg", slug: "demelus", youtubeUrl: "https://www.youtube.com/@Demelus", subscribers: 15000, views: 5300000, videos: 300, status: 'inactive' },
+  { name: "Marcu", description: "Info and research about youtuber related topics and random facts with detailed analysis.", image: "/marcu.jpg", slug: "marcu", youtubeUrl: "https://www.youtube.com/@Marcuyt", subscribers: 15000, views: 3500000, videos: 50, status: 'active' },
+  { name: "Demetrix", description: "Info videos about YouTubers and more with insightful content and analysis.", image: "/demetrix.jpg", slug: "demetrix", youtubeUrl: "https://www.youtube.com/@Demetrixx", subscribers: 14000, views: 6200000, videos: 300, status: 'inactive' },
+  { name: "Demelus Plus", description: "Entertaining long-form videos with informative content on trending gaming topics.", image: "/demelusplus.jpg", slug: "demelus-plus", youtubeUrl: "https://www.youtube.com/@DemelusPlus", subscribers: 11000, views: 4500000, videos: 200, status: 'inactive' },
+  { name: "Supremeandreal", description: "Streamer clips and shorts highlights of clips featuring the best streaming moments.", image: "/supremeandreal.jpg", slug: "supremeandreal", youtubeUrl: "https://www.youtube.com/@supremeandreal", subscribers: 10000, views: 10000000, videos: 1100, status: 'inactive' },
+  { name: "Stats Crafter (old)", description: "Statistic videos and data visualization videos about other YouTubers subscriber counts and channel analytics.", image: "/statscrafterold.jpg", slug: "stats-crafter-old", youtubeUrl: "https://www.youtube.com/@statscrafter30", subscribers: 10000, views: 1700000, videos: 300, status: 'inactive' },
+  { name: "Clipsy", description: "Short-form gaming clips and entertaining moments from the best gameplay highlights.", image: "/clipsy.jpg", slug: "clipsy", youtubeUrl: "https://www.youtube.com/@ClipsyGHG", subscribers: 8200, views: 17000000, videos: 1200, status: 'inactive' },
+  { name: "Malcado", description: "Info content about French YouTubers with analysis and insights into the French YouTube scene.", image: "/malcado.jpg", slug: "malcado", youtubeUrl: "https://www.youtube.com/@Malcado", subscribers: 7600, views: 800000, videos: 18, status: 'inactive' },
+  { name: "Demi Shorts", description: "Minecraft gaming shorts featuring exciting gameplay and entertaining moments for mobile viewers.", image: "/demishorts.jpg", slug: "demi-shorts", youtubeUrl: "https://www.youtube.com/@Demi-minecraft", subscribers: 7000, views: 9000000, videos: 250, status: 'inactive' },
+  { name: "Amidus Info", description: "Info and research videos about mostly numbers and stats with detailed analysis.", image: "/amidusinfo.jpg", slug: "amidus-info", youtubeUrl: "https://www.youtube.com/@Amidus2", subscribers: 6300, views: 600000, videos: 30, status: 'inactive' },
+  { name: "Blofy", description: "Test longform content focused on in-depth analysis and storytelling.", image: "/blofy.jpg", slug: "blofy", youtubeUrl: "https://www.youtube.com/@blofy", subscribers: 5000, views: 250000, videos: 50, status: 'inactive' },
+  { name: "Demi", description: "Minecraft gaming videos, roleplay videos and story-driven content with engaging narratives.", image: "/demi.jpg", slug: "demi", youtubeUrl: "https://www.youtube.com/@Demi-mc", subscribers: 4500, views: 500000, videos: 100, status: 'inactive' },
+  { name: "Finance Data", description: "Data about income of celebrities with detailed financial analysis and insights.", image: "/financedata.jpg", slug: "finance-data", youtubeUrl: "https://www.youtube.com/@yourFinanceData", subscribers: 2200, views: 1600000, videos: 61, status: 'inactive' },
+  { name: "Mehr Besitzer", description: "Shorts tests and experimental content for testing and optimization purposes.", image: "/mehrbesitzer.jpg", slug: "mehr-besitzer", youtubeUrl: "https://www.youtube.com/channel/UCYUyufqy1xYQQwnIe11-oWQ", subscribers: 2100, views: 1000000, videos: 150, status: 'inactive' },
+  { name: "Der Test", description: "Test videos and random viral sound effect videos.", image: "/dertest.jpg", slug: "der-test", youtubeUrl: "https://www.youtube.com/@dertestende", subscribers: 2800, views: 900000, videos: 70, status: 'inactive' },
+  { name: "YEA GANG", description: "Meme shorts and random content designed for entertainment and engagement.", image: "/yeagang.jpg", slug: "yea-gang", youtubeUrl: "https://www.youtube.com/@emptyyyyyyyyy", subscribers: 1500, views: 2000000, videos: 140, status: 'inactive' },
+  { name: "DTM", description: "German Twitch Highlights and Clips showcasing entertaining moments from German streamers.", image: "/dtm.jpg", slug: "dtm", youtubeUrl: "https://www.youtube.com/@DTM-Clips", subscribers: 1400, views: 1600000, videos: 200, status: 'inactive' },
+  { name: "Finanzdaten", description: "Data about income of celebrities with comprehensive financial information and statistics.", image: "/finanzdaten.jpg", slug: "finanzdaten", youtubeUrl: "https://www.youtube.com/@Finanzdaten", subscribers: 1300, views: 1200000, videos: 50, status: 'inactive' },
+  { name: "Gron", description: "German Twitch Highlights and Clips showcasing entertaining moments from German streamers.", image: "/gron.jpg", slug: "gron", youtubeUrl: "https://www.youtube.com/@by_Gron", subscribers: 700, views: 600000, videos: 300, status: 'inactive' },
+  { name: "BesitzerMC", description: "Shorts marketing for minecraft server and minecraft gaming content with engaging gameplay.", image: "/besitzermc.jpg", slug: "besitzermc", youtubeUrl: "https://www.youtube.com/@besitzerMC", subscribers: 700, views: 300000, videos: 100, status: 'active' },
+  { name: "Silen", description: "Info content about German gaming YouTubers with analysis and insights.", image: "/silen.jpg", slug: "silen", youtubeUrl: "https://www.youtube.com/@Silen_TV", subscribers: 600, views: 300000, videos: 200, status: 'active' },
+];
+
+// Calculate portfolio statistics
+const totalChannels = channels.length;
+const totalSubscribers = channels.reduce((sum, ch) => sum + ch.subscribers, 0);
+const totalViews = channels.reduce((sum, ch) => sum + ch.views, 0);
+const totalVideos = channels.reduce((sum, ch) => sum + ch.videos, 0);
+const activeChannels = channels.filter(ch => ch.status === 'active').length;
+const avgViewsPerVideo = Math.round(totalViews / totalVideos);
+
+// Format large numbers for display
+function formatCount(num: number): string {
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(2).replace(/\.?0+$/, '') + 'M';
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.?0+$/, '') + 'K';
+  }
+  return num.toString();
+}
+
+// Format video count with comma
+function formatVideos(num: number): string {
+  if (num >= 1000) {
+    return num.toLocaleString('en-US');
+  }
+  return num.toString();
+}
+
+const stats = {
+  channels: totalChannels,
+  subscribers: formatCount(totalSubscribers),
+  views: formatCount(totalViews),
+  videos: totalVideos.toLocaleString('en-US'),
+  avgViews: formatCount(avgViewsPerVideo),
+  active: activeChannels
+};
 ---
 
 <Layout title="YCB - YouTube Channel Building | CI-Analytics">
@@ -35,1163 +117,86 @@ import Layout from '../../layouts/Layout.astro';
         <div class="stat-card">
           <div class="stat-icon">📺</div>
           <div class="stat-content">
-            <span class="stat-number">31</span>
+            <span class="stat-number">{stats.channels}</span>
             <span class="stat-text">Total listed Channels</span>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">👥</div>
           <div class="stat-content">
-            <span class="stat-number">663.4K</span>
+            <span class="stat-number">{stats.subscribers}</span>
             <span class="stat-text">Total Subscribers</span>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">👁️</div>
           <div class="stat-content">
-            <span class="stat-number">264.25M</span>
+            <span class="stat-number">{stats.views}</span>
             <span class="stat-text">Total Views</span>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">🎬</div>
           <div class="stat-content">
-            <span class="stat-number">10,812</span>
+            <span class="stat-number">{stats.videos}</span>
             <span class="stat-text">Total Videos</span>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">📊</div>
           <div class="stat-content">
-            <span class="stat-number">24.5K</span>
+            <span class="stat-number">{stats.avgViews}</span>
             <span class="stat-text">Avg Views per Video</span>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">✅</div>
           <div class="stat-content">
-            <span class="stat-number">7</span>
+            <span class="stat-number">{stats.active}</span>
             <span class="stat-text">Active Channels</span>
           </div>
         </div>
       </div>
 
       <div class="channels-grid">
-<!-- Channel  1: Your Sound Effects -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/yoursoundeffects.jpg" alt="Your Sound Effects Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Your Sound Effects</h3>
-            <p class="channel-description">
-              Uploads viral sound effects and meme videos with engaging and entertaining content.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">151K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">31M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">400+</span>
-                <span class="stat-label">Videos</span>
-              </div>
+        {channels.map((channel, index) => (
+          <div class="channel-card">
+            <div class="channel-thumbnail">
+              <img src={channel.image} alt={`${channel.name} Logo`} class="channel-logo" />
+              <div class="play-icon">▶</div>
             </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/your-sound-effects" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@yoursoundeffects2.013" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  2: Tiimon -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/tiimon.jpg" alt="Tiimon Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Tiimon</h3>
-            <p class="channel-description">
-              Consistent Minecraft gaming content. Testing sustainable long-term production and monetization strategies.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">141K</span>
-                <span class="stat-label">Subscribers</span>
+            <div class="channel-info">
+              <h3>{channel.name}</h3>
+              <p class="channel-description">
+                {channel.description}
+              </p>
+              <div class="channel-stats">
+                <div class="stat">
+                  <span class="stat-value">{formatCount(channel.subscribers)}</span>
+                  <span class="stat-label">Subscribers</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">{formatCount(channel.views)}</span>
+                  <span class="stat-label">Total Views</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-value">{formatVideos(channel.videos)}+</span>
+                  <span class="stat-label">Videos</span>
+                </div>
               </div>
-              <div class="stat">
-                <span class="stat-value">53M</span>
-                <span class="stat-label">Total Views</span>
+              <div class="channel-status">
+                <span class="status-label">Channel Status</span>
+                <span class={`status-badge status-${channel.status}`}>
+                  {channel.status === 'active' ? 'Active' : 'Inactive'}
+                </span>
               </div>
-              <div class="stat">
-                <span class="stat-value">3,000+</span>
-                <span class="stat-label">Videos</span>
+              <div class="channel-actions">
+                <a href={`/data/${channel.slug}`} class="stats-btn">Stats Insights</a>
+                <a href={channel.youtubeUrl} class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
               </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-active">Active</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/tiimon" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Tiimon_" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
             </div>
           </div>
-        </div>
-
-        <!-- Channel  2: Demelus Shorts -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/demelusshorts.jpg" alt="Demelus Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Demelus Shorts</h3>
-            <p class="channel-description">
-              Viral informational shorts. Short-form content optimized for mobile and maximum reach.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">103K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">42.5M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">100+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/demelus-shorts" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@DemelusShorts" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  3: Smerchy -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/smerchy.jpg" alt="Smerchy Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Smerchy</h3>
-            <p class="channel-description">
-              Minecraft gaming shorts with fast-paced entertainment and engaging gameplay moments.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">103K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">20M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">1,000+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-active">Active</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/smerchy" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@smerchyy" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  4: Amidus -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/amidus.jpg" alt="Amidus Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Amidus</h3>
-            <p class="channel-description">
-              Viral long-form informational videos on trending topics. High-quality content for maximum engagement.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">65.5K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">8M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">43</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-active">Active</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/amidus" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@AmidusTV" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  5: Voiet -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/voiet.jpg" alt="Voiett Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Voiet</h3>
-            <p class="channel-description">
-              Consistent Minecraft gaming content like Tiimon. Exploring sustainable long-term production and revenue generation.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">50K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">10M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">800+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-active">Active</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/voiett" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Voiett" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  6: Stats Crafter -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/statscrafter.jpg" alt="Stats Crafter Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Stats Crafter</h3>
-            <p class="channel-description">
-              Statistic videos and data visualization videos about other YouTubers subscriber counts and growth analytics.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">42.3K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">17.7M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">250+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/stats-crafter" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@StatsCrafter" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  7: Butty -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/butty.jpg" alt="Butty Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Butty</h3>
-            <p class="channel-description">
-              Shorts minigames and performance test shorts designed to gain subscribers and increase engagement.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">40K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">2M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">400+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/butty" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Butty-TV" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  8: Kekskuchen -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/kekskuchen.jpg" alt="Kekskuchen Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Kekskuchen</h3>
-            <p class="channel-description">
-              Streamer clips with the best moments from live gaming sessions and entertaining reactions.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">23K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">2.5M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">250+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/kekskuchen" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Kekskuchenn" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  9: Smerchy Shortz -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/smerchyshortz.jpg" alt="Smerchy Shortz Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Smerchy Shortz</h3>
-            <p class="channel-description">
-              Short-form viral gaming content optimized for maximum reach and engagement.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">18K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">11.6M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">100+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/smerchy-shortz" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@smerchyshortz" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  10: Demelus -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/demelus.jpg" alt="Demelus Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Demelus</h3>
-            <p class="channel-description">
-              Fast and summarizing long-form informative content on popular topics.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">15K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">5.3M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">300+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/demelus" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Demelus" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  11: Marcu -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/marcu.jpg" alt="Marcu Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Marcu</h3>
-            <p class="channel-description">
-              Info and research about youtuber related topics and random facts with detailed analysis.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">15K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">3.5M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">50</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/marcu" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Marcuyt" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  12: Demetrix -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/demetrix.jpg" alt="Demetrix Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Demetrix</h3>
-            <p class="channel-description">
-              Info videos about YouTubers and more with insightful content and analysis.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">14K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">6.2M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">300+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/demetrix" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Demetrixx" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  12: Demelus Plus -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/demelusplus.jpg" alt="Demelus Plus Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Demelus Plus</h3>
-            <p class="channel-description">
-              Entertaining long-form videos with informative content on trending gaming topics.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">11K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">4.5M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">200+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/demelus-plus" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@DemelusPlus" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  13: Supremeandreal -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/supremeandreal.jpg" alt="Supremeandreal Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Supremeandreal</h3>
-            <p class="channel-description">
-              Streamer clips and shorts highlights of clips featuring the best streaming moments.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">10K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">10M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">1,100+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/supremeandreal" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@supremeandreal" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  14: Stats Crafter (old) -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/statscrafterold.jpg" alt="Stats Crafter Old Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Stats Crafter (old)</h3>
-            <p class="channel-description">
-              Statistic videos and data visualization videos about other YouTubers subscriber counts and channel analytics.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">10K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">1.7M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">300+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/stats-crafter-old" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@statscrafter30" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  15: Clipsy -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/clipsy.jpg" alt="Clipsy Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Clipsy</h3>
-            <p class="channel-description">
-              Short-form gaming clips and entertaining moments from the best gameplay highlights.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">8.2K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">17M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">1,200+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/clipsy" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@ClipsyGHG" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  16: Malcado -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/malcado.jpg" alt="Malcado Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Malcado</h3>
-            <p class="channel-description">
-              Info content about French YouTubers with analysis and insights into the French YouTube scene.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">7.6K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">800K</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">18</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-active">Active</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/malcado" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Malcado" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  17: Demi Shorts -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/demishorts.jpg" alt="Demi Shorts Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Demi Shorts</h3>
-            <p class="channel-description">
-              Minecraft gaming shorts featuring exciting gameplay and entertaining moments for mobile viewers.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">7K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">9M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">250+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/demi-shorts" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Demi-minecraft" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  18: Amidus Info -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/amidusinfo.jpg" alt="Amidus Info Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Amidus Info</h3>
-            <p class="channel-description">
-              Info and research videos about mostly numbers and stats with detailed analysis.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">6.3K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">600K</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">30</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/amidus-info" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Amidus2" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel 21: Blofy - 5K -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/blofy.jpg" alt="Blofy Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Blofy</h3>
-            <p class="channel-description">
-              Test longform content focused on in-depth analysis and storytelling.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">5K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">250K</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">50+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/blofy" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@blofy" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  22: Demi -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/demi.jpg" alt="Demi Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Demi</h3>
-            <p class="channel-description">
-              Minecraft gaming videos, roleplay videos and story-driven content with engaging narratives.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">4.5K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">500K</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">100+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/demi" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Demi-mc" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  20: Finance Data -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/financedata.jpg" alt="Finance Data Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Finance Data</h3>
-            <p class="channel-description">
-              Data about income of celebrities with detailed financial analysis and insights.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">2.2K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">1.6M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">61</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/finance-data" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@yourFinanceData" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  21: Mehr Besitzer -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/mehrbesitzer.jpg" alt="Mehr Besitzer Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Mehr Besitzer</h3>
-            <p class="channel-description">
-              Shorts tests and experimental content for testing and optimization purposes.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">2.1K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">1M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">150</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/mehr-besitzer" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/channel/UCYUyufqy1xYQQwnIe11-oWQ" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel 23: Der Test - 2.8K -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/dertest.jpg" alt="Der Test Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Der Test</h3>
-            <p class="channel-description">
-              Test videos and random viral sound effect videos.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">2.8K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">0.9M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">70+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/der-test" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@dertestende" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  24: YEA GANG -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/yeagang.jpg" alt="YEA GANG Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>YEA GANG</h3>
-            <p class="channel-description">
-              Meme shorts and random content designed for entertainment and engagement.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">1.5K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">2M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">140</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/yea-gang" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@emptyyyyyyyyy" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  22: DTM -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/dtm.jpg" alt="DTM Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>DTM</h3>
-            <p class="channel-description">
-              German Twitch Highlights and Clips showcasing entertaining moments from German streamers.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">1.4K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">1.6M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">200+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/dtm" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@DTM-Clips" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  25: Finanzdaten -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/finanzdaten.jpg" alt="Finanzdaten Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Finanzdaten</h3>
-            <p class="channel-description">
-              Data about income of celebrities with comprehensive financial information and statistics.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">1.3K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">1.2M</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">50</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/finanzdaten" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Finanzdaten" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  23: Gron -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/gron.jpg" alt="Gron Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Gron</h3>
-            <p class="channel-description">
-              German Twitch Highlights and Clips showcasing entertaining moments from German streamers.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">0.7K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">600K</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">300+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-inactive">Inactive</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/gron" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@by_Gron" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  24: BesitzerMC -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/besitzermc.jpg" alt="BesitzerMC Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>BesitzerMC</h3>
-            <p class="channel-description">
-              Shorts marketing for minecraft server and minecraft gaming content with engaging gameplay.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">0.7K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">300K</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">100+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-active">Active</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/besitzermc" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@besitzerMC" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Channel  25: Silen -->
-        <div class="channel-card">
-          <div class="channel-thumbnail">
-            <img src="/silen.jpg" alt="Silen Logo" class="channel-logo" />
-            <div class="play-icon">▶</div>
-          </div>
-          <div class="channel-info">
-            <h3>Silen</h3>
-            <p class="channel-description">
-              Info content about German gaming YouTubers with analysis and insights.
-            </p>
-            <div class="channel-stats">
-              <div class="stat">
-                <span class="stat-value">0.6K</span>
-                <span class="stat-label">Subscribers</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">300K</span>
-                <span class="stat-label">Total Views</span>
-              </div>
-              <div class="stat">
-                <span class="stat-value">200+</span>
-                <span class="stat-label">Videos</span>
-              </div>
-            </div>
-            <div class="channel-status">
-              <span class="status-label">Channel Status</span>
-              <span class="status-badge status-active">Active</span>
-            </div>
-            <div class="channel-actions">
-              <a href="/data/silen" class="stats-btn">Stats Insights</a>
-              <a href="https://www.youtube.com/@Silen_TV" class="youtube-btn" target="_blank" rel="noopener noreferrer">Visit Channel</a>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
       <!-- Additional Info -->
