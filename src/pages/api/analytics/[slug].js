@@ -1,7 +1,9 @@
-import { db } from '../../lib/db';
+import { db } from '../../../lib/db.ts';
+
+export const prerender = false;
 
 // Hole Analytics-Daten für einen Kanal
-export async function GET({ params }: { params: { slug: string } }) {
+export async function GET({ params }) {
   const { slug } = params;
 
   try {
@@ -11,7 +13,7 @@ export async function GET({ params }: { params: { slug: string } }) {
       WHERE channel_slug = ?
       ORDER BY date DESC
       LIMIT 90
-    `).all(slug) as any[];
+    `).all(slug);
 
     // Get import history
     const imports = db.prepare(`
@@ -19,7 +21,7 @@ export async function GET({ params }: { params: { slug: string } }) {
       WHERE channel_slug = ?
       ORDER BY import_date DESC
       LIMIT 10
-    `).all(slug) as any[];
+    `).all(slug);
 
     // Get summary stats
     const summary = db.prepare(`
@@ -32,7 +34,7 @@ export async function GET({ params }: { params: { slug: string } }) {
         MAX(views) as max_views
       FROM channel_analytics
       WHERE channel_slug = ?
-    `).get(slug) as any;
+    `).get(slug);
 
     return new Response(JSON.stringify({
       success: true,

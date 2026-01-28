@@ -57,19 +57,17 @@ function formatDate(date: Date) {
     <div class="container">
       <div class="detail-grid">
         <div class="main-column">
-          <!-- Analytics Import & Visualization -->
-          <div class="analytics-section">
-            <h2>📊 Live Analytics Dashboard</h2>
-            <DataImporter client:load slug={entry.slug} />
-            <AnalyticsCharts client:load slug={entry.slug} />
-          </div>
-
           <!-- Original Content -->
           <article class="content-card glass">
             <div class="data-content">
               <Content />
             </div>
           </article>
+
+          <!-- Analytics Charts -->
+          <div class="analytics-charts-card glass">
+            <AnalyticsCharts client:load slug={entry.slug} />
+          </div>
 
           <div class="data-footer">
             <a href="/data" class="back-button">← Back to All Data</a>
@@ -116,6 +114,12 @@ function formatDate(date: Date) {
               </div>
             </div>
           </div>
+
+          <!-- Analytics Import -->
+          <div class="analytics-section">
+            <h2>📊 Live Analytics Dashboard</h2>
+            <DataImporter client:load slug={entry.slug} />
+          </div>
         </aside>
       </div>
     </div>
@@ -123,6 +127,15 @@ function formatDate(date: Date) {
 </Layout>
 
 <style>
+  .analytics-charts-card {
+    margin-top: 2rem;
+    padding: 2rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 102, 255, 0.03));
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    backdrop-filter: blur(10px);
+  }
+
   .page-hero {
     padding: 3.5rem 2rem;
     padding-top: 5.5rem;

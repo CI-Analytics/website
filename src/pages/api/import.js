@@ -1,28 +1,30 @@
-import { db } from '../lib/db';
+import { db } from '../../lib/db.ts';
 
-// Typen für Analytics-Daten
-export interface ChannelAnalytics {
-  channel_slug: string;
-  date: string;
-  subscribers: number;
-  views: number;
-  videos: number;
-  avg_views_per_video: number;
-  growth_rate?: number;
-  engagement_rate?: number;
-}
+export const prerender = false;
 
 // Importiere Daten von externer API oder manuell
-export async function POST({ request }: { request: Request }) {
+export async function POST({ request }) {
   try {
     const body = await request.json();
     const { channel_slug, data } = body;
+
+    console.log('Import request received:', { channel_slug, dataCount: data?.length });
 
     if (!channel_slug || !Array.isArray(data)) {
       return new Response(JSON.stringify({ error: 'Invalid request format' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
+    }
+
+    // Ensure channel exists in channels table
+    try {
+      db.prepare(`
+        INSERT OR IGNORE INTO channels (slug, name, status)
+        VALUES (?, ?, ?)
+      `).run(channel_slug, channel_slug, 'Active');
+    } catch (channelError) {
+      console.log('Channel already exists or error:', channelError);
     }
 
     // Prepare insert statement
@@ -40,17 +42,17 @@ export async function POST({ request }: { request: Request }) {
     `);
 
     // Begin transaction
-    const insertMany = db.transaction((entries: ChannelAnalytics[]) => {
+    const insertMany = db.transaction((entries) => {
       let imported = 0;
       for (const entry of entries) {
         try {
           insertStmt.run(
             channel_slug,
             entry.date,
-            entry.subscribers,
-            entry.views,
-            entry.videos,
-            entry.avg_views_per_video,
+            entry.subscribers || 0,
+            entry.views || 0,
+            entry.videos || 0,
+            entry.avg_views_per_video || 0,
             entry.growth_rate || null,
             entry.engagement_rate || null
           );
@@ -63,12 +65,17 @@ export async function POST({ request }: { request: Request }) {
     });
 
     const recordsImported = insertMany(data);
+    console.log('Records imported:', recordsImported);
 
     // Log the import
-    db.prepare(`
-      INSERT INTO import_logs (channel_slug, records_imported, api_source, status)
-      VALUES (?, ?, ?, ?)
-    `).run(channel_slug, recordsImported, 'manual', 'success');
+    try {
+      db.prepare(`
+        INSERT INTO import_logs (channel_slug, records_imported, api_source, status)
+        VALUES (?, ?, ?, ?)
+      `).run(channel_slug, recordsImported, 'manual', 'success');
+    } catch (logError) {
+      console.error('Failed to log import:', logError);
+    }
 
     return new Response(JSON.stringify({
       success: true,
