@@ -1,16 +1,22 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import DataImporter from '../../components/charts/DataImporter';
+import AnalyticsCharts from '../../components/charts/AnalyticsCharts';
+
+type Props = {
+  entry: CollectionEntry<'data'>;
+};
 
 export async function getStaticPaths() {
   const dataEntries = await getCollection('data');
-  return dataEntries.map(entry => ({
+  return dataEntries.map((entry: CollectionEntry<'data'>) => ({
     params: { slug: entry.slug },
     props: { entry },
   }));
 }
 
-const { entry } = Astro.props;
+const { entry } = Astro.props as Props;
 const { Content } = await entry.render();
 
 function formatDate(date: Date) {
@@ -51,6 +57,14 @@ function formatDate(date: Date) {
     <div class="container">
       <div class="detail-grid">
         <div class="main-column">
+          <!-- Analytics Import & Visualization -->
+          <div class="analytics-section">
+            <h2>📊 Live Analytics Dashboard</h2>
+            <DataImporter client:load slug={entry.slug} />
+            <AnalyticsCharts client:load slug={entry.slug} />
+          </div>
+
+          <!-- Original Content -->
           <article class="content-card glass">
             <div class="data-content">
               <Content />
@@ -605,5 +619,16 @@ function formatDate(date: Date) {
       padding: 0.6rem 1.5rem;
       font-size: 0.9rem;
     }
+  }
+
+  /* Analytics Section Styles */
+  .analytics-section {
+    margin-bottom: 2rem;
+  }
+
+  .analytics-section h2 {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
   }
 </style>
