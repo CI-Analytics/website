@@ -10,7 +10,7 @@ The website is going to showcase CI-Analytics' comprehensive service portfolio:
 - **Custom Data Analysis Tools**: Tailored solutions for specific projects
 - **Social Media Marketing**: Product promotion with data-driven strategies
 - **Optimized Data Input and Analysis**: Specialized programs for enhanced data processing
-- **Consulting Services**: Limited availability for data-driven decision making
+- **Consulting Services**: (Limited availability) for data-driven decision making
 
 ### Key Features Highlighted
 - Data collection, storage, and analysis methodologies
