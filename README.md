@@ -1,7 +1,7 @@
 
 ## 📈 - CI-Analytics Services Presented
 
-The website showcases CI-Analytics' comprehensive service portfolio:
+The website is going to showcase CI-Analytics' comprehensive service portfolio:
 
 ### Core Products & Services
 - **Dashboard Applications**: Web-integrated tools for comprehensive data visualization
