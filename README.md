@@ -1,13 +1,41 @@
-# 📈 CI-Analytics 📈
 
-## 📊 What is CI-Analytics about?
+## 📈 - CI-Analytics Services Presented
 
-This Organisation existed for years now - Its main focus: Analyzing internet data.
+The website showcases CI-Analytics' comprehensive service portfolio:
 
-## 📊 What is to be expected in the future?
+### Core Products & Services
+- **Dashboard Applications**: Web-integrated tools for comprehensive data visualization
+- **Business Simulation Software**: Strategic planning tools
+- **Social Media Analytics**: Strategy-oriented analysis for YouTube and other platforms
+- **Custom Data Analysis Tools**: Tailored solutions for specific projects
+- **Social Media Marketing**: Product promotion with data-driven strategies
+- **Optimized Data Input and Analysis**: Specialized programs for enhanced data processing
+- **Consulting Services**: Limited availability for data-driven decision making
 
-Optimized dashboards, scientific key performance indicators, various different case studies, data based strategy - Developing a foundation to build upon in specific data driven environments, but also for general use cases.
+### Key Features Highlighted
+- Data collection, storage, and analysis methodologies
+- Transparent processes for extracting insights from minimal data
+- Strategic information for growth and development in digital business
+- Focus on YouTube and social media platform analytics
 
-## 📊 Astro Website for CI-Analytics
+## 🚀 - Future Development
 
-Modern website built with Astro for CI-Analytics - Analyzing internet data with style.
+The website will evolve to support:
+
+- **Enhanced Authentication**: Full identity provider backend integration
+- **Extended App Features**: More embedded dashboard functionality
+- **Blog Management System**: Content creation and management capabilities
+- **Improved User Experience**: Optimized navigation and performance
+- **Case Study Showcase**: Real-world application scenarios and results
+
+## 🔗 - Ecosystem Connection
+
+The website serves as the entry point to CI-Analytics' data-driven ecosystem, making professional data analysis accessible and transparent. Through its role as external representation and marketing funnel, it bridges the gap between complex data analysis and practically usable insights.
+
+## 🌍 - Visit the Website
+
+Check out the live website at [ci-analytics.org](https://ci-analytics.org)
+
+---
+
+**CI-Analytics** - Advanced Internet Data Analysis & Strategy
