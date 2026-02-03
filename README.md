@@ -11,35 +11,3 @@ Optimized dashboards, scientific key performance indicators, various different c
 ## 📊 Astro Website for CI-Analytics
 
 Modern website built with Astro for CI-Analytics - Analyzing internet data with style.
-
-## 🚀 Getting Started
-
-### Installation
-
-```bash
-npm install
-```
-
-### Development
-
-```bash
-npm run dev
-```
-
-### Build
-
-```bash
-npm run build
-```
-
-### Preview Production Build
-
-```bash
-npm run preview
-```
-
-## 🛠️ Technology Stack
-
-- **Astro** - Fast, modern static site builder
-- **TypeScript** - Type-safe development
-- Responsive design with mobile-first approach
